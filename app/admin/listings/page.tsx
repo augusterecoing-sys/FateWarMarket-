@@ -88,6 +88,12 @@ export default async function AdminListings() {
                   >
                     Voir
                   </a>
+                  <a
+                    href={`/admin/listings/${item.id}/edit`}
+                    style={{ fontSize: 13, fontWeight: 600, padding: "8px 14px", border: "1px solid rgba(201,162,39,0.4)", borderRadius: 7, textDecoration: "none", color: "#C9A227" }}
+                  >
+                    Modifier
+                  </a>
                   <form action={deleteListing}>
                     <input type="hidden" name="id" value={item.id} />
                     <button
