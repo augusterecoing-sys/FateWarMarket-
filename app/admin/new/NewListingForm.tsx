@@ -70,6 +70,9 @@ export default function NewListingForm() {
       <label style={label}>Nom du vendeur</label>
       <input style={field} name="sellerName" required placeholder="PlayerName" />
 
+      <label style={label}>Discord du vendeur (mémo interne, jamais affiché publiquement)</label>
+      <input style={field} name="sellerDiscord" placeholder="Ex: pseudo#1234 ou @pseudo" />
+
       <label style={label}>Note (0–5, optionnel)</label>
       <input style={field} name="rating" type="number" step="0.1" placeholder="4.8" />
 

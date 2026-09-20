@@ -14,6 +14,7 @@ model Listing {
   price      Int // en dollars, entier (ex: 425)
   level      Int
   sellerName String
+  sellerDiscord String? // mémo interne : pseudo Discord du vendeur, jamais affiché publiquement
   verified   Boolean  @default(false)
   rating     Float?
   statLine   String // ex: "120 Skins · 45 Characters · High Rune Collection"

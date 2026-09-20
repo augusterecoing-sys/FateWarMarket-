@@ -71,6 +71,9 @@ export default async function AdminListings() {
                   </div>
                   <div style={{ fontSize: 13, color: "#9C9186" }}>
                     {item.sellerName} · Lv. {item.level}
+                    {item.sellerDiscord && (
+                      <span style={{ color: "#C9A227" }}> · Discord : {item.sellerDiscord}</span>
+                    )}
                   </div>
                 </div>
 
