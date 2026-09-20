@@ -1,5 +1,4 @@
 export default function Middleman() {
-  const discordInvite = process.env.DISCORD_INVITE_URL || "#";
   return (
     <main>
       <header style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "22px 5%", borderBottom: "1px solid rgba(243,233,218,0.08)" }}>
@@ -53,7 +52,7 @@ export default function Middleman() {
         </div>
 
         <a
-          href={discordInvite}
+          href="/contact"
           style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "#5865F2", color: "#fff", fontSize: 14, fontWeight: 700, padding: "12px 22px", borderRadius: 9, textDecoration: "none" }}
         >
           Request Middleman on Discord

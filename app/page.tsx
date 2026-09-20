@@ -42,6 +42,16 @@ export default async function Home() {
         </a>
       </section>
 
+      {/* Why this marketplace */}
+      <section style={{ padding: "0 5% 60px", maxWidth: 800, margin: "0 auto", textAlign: "center" }}>
+        <h2 style={{ fontFamily: "'Bricolage Grotesque',sans-serif", fontSize: 22, fontWeight: 700, marginBottom: 14 }}>
+          Every account, in one place
+        </h2>
+        <p style={{ fontSize: 15, lineHeight: 1.7, color: "#D8CFC2", margin: 0 }}>
+          Players have been selling their Fate War accounts on Discord for years — scattered across servers, hard to compare, easy to get scammed on. This marketplace brings those listings together in one spot: real screenshots, real seller history, and prices you can actually compare side by side before you buy.
+        </p>
+      </section>
+
       {/* Browse by price */}
       <section style={{ padding: "0 5% 60px", maxWidth: 1200, margin: "0 auto" }}>
         <h2 style={{ fontSize: 20, fontWeight: 700, margin: "0 0 18px" }}>Browse by budget</h2>

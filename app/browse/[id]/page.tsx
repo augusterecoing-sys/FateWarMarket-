@@ -32,7 +32,6 @@ export default async function AccountDetail({
     : "overview";
 
   const imagesForTab = listing.images.filter((img) => img.category === activeTab);
-  const discordInvite = process.env.DISCORD_INVITE_URL || "#";
 
   return (
     <main>
@@ -67,7 +66,7 @@ export default async function AccountDetail({
           <div style={{ textAlign: "right" }}>
             <div style={{ fontFamily: "'Bricolage Grotesque',sans-serif", fontSize: 32, fontWeight: 700, color: "#F0793B" }}>${listing.price}</div>
             <a
-              href={discordInvite}
+              href="/contact"
               style={{ display: "inline-block", marginTop: 10, background: "#5865F2", color: "#fff", fontSize: 13.5, fontWeight: 700, padding: "10px 18px", borderRadius: 8, textDecoration: "none" }}
             >
               Contact seller on Discord
