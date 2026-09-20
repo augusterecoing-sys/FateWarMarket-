@@ -74,6 +74,12 @@ export default async function AdminListings() {
                     {item.sellerDiscord && (
                       <span style={{ color: "#C9A227" }}> · Discord : {item.sellerDiscord}</span>
                     )}
+                    {item.sellerEmail && (
+                      <span style={{ color: "#C9A227" }}> · Email : {item.sellerEmail}</span>
+                    )}
+                    {item.sellerPhone && (
+                      <span style={{ color: "#C9A227" }}> · Tél : {item.sellerPhone}</span>
+                    )}
                   </div>
                 </div>
 

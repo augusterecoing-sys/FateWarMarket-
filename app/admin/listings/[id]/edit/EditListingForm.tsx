@@ -25,6 +25,8 @@ type Listing = {
   level: number;
   sellerName: string;
   sellerDiscord: string | null;
+  sellerEmail: string | null;
+  sellerPhone: string | null;
   accountType: string | null;
   verified: boolean;
   rating: number | null;
@@ -100,6 +102,12 @@ export default function EditListingForm({ listing }: { listing: Listing }) {
 
       <label style={label}>Discord du vendeur (mémo interne)</label>
       <input style={field} name="sellerDiscord" defaultValue={listing.sellerDiscord ?? ""} />
+
+      <label style={label}>Email du vendeur (mémo interne)</label>
+      <input style={field} name="sellerEmail" type="email" defaultValue={listing.sellerEmail ?? ""} />
+
+      <label style={label}>Téléphone du vendeur (mémo interne, avec indicatif)</label>
+      <input style={field} name="sellerPhone" type="tel" defaultValue={listing.sellerPhone ?? ""} />
 
       <label style={label}>Note (0–5, optionnel)</label>
       <input style={field} name="rating" type="number" step="0.1" defaultValue={listing.rating ?? ""} />

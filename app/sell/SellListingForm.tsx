@@ -45,6 +45,7 @@ export default function SellListingForm() {
   const [error, setError] = useState("");
   const [counts, setCounts] = useState<Record<string, number>>({});
   const [accountType, setAccountType] = useState("");
+  const [contactMethod, setContactMethod] = useState<"discord" | "email" | "phone">("discord");
 
   const missingRequired = CATEGORY_FIELDS.filter((c) => c.required && !(counts[c.field] > 0));
   const canSubmit = missingRequired.length === 0 && accountType !== "" && !uploading;
@@ -110,8 +111,48 @@ export default function SellListingForm() {
       <label style={label}>Your in-game name</label>
       <input style={field} name="sellerName" required placeholder="PlayerName" />
 
-      <label style={label}>Your Discord (private, never shown publicly)</label>
-      <input style={field} name="sellerDiscord" required placeholder="Ex: pseudo#1234 or @pseudo" />
+      <label style={label}>How can we reach you? (private, never shown publicly)</label>
+      <div style={{ display: "flex", gap: 8, marginBottom: 14 }}>
+        {([
+          { value: "discord", label: "Discord" },
+          { value: "email", label: "Email" },
+          { value: "phone", label: "Phone" },
+        ] as const).map((m) => (
+          <button
+            key={m.value}
+            type="button"
+            onClick={() => setContactMethod(m.value)}
+            style={{
+              flex: 1,
+              padding: "10px 8px",
+              borderRadius: 8,
+              border: `1px solid ${contactMethod === m.value ? "#E2622B" : "rgba(243,233,218,0.15)"}`,
+              background: contactMethod === m.value ? "rgba(226,98,43,0.12)" : "#1D1812",
+              color: contactMethod === m.value ? "#E2622B" : "#D8CFC2",
+              fontSize: 13.5,
+              fontWeight: 700,
+              cursor: "pointer",
+            }}
+          >
+            {m.label}
+          </button>
+        ))}
+      </div>
+
+      {contactMethod === "discord" && (
+        <input style={field} name="sellerDiscord" required placeholder="Ex: pseudo#1234 or @pseudo" />
+      )}
+      {contactMethod === "email" && (
+        <input style={field} name="sellerEmail" type="email" required placeholder="you@example.com" />
+      )}
+      {contactMethod === "phone" && (
+        <>
+          <input style={field} name="sellerPhone" type="tel" required placeholder="+33 6 12 34 56 78" />
+          <p style={{ fontSize: 12.5, color: "#9C9186", marginTop: -12, marginBottom: 16 }}>
+            Include the country code (e.g. +33 for France, +1 for the US).
+          </p>
+        </>
+      )}
 
       <label style={label}>Summary (shown on the listing card)</label>
       <input style={field} name="statLine" required placeholder="120 Skins · 45 Characters · High Rune Collection" />

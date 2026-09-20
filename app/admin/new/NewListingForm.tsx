@@ -74,6 +74,12 @@ export default function NewListingForm() {
       <label style={label}>Discord du vendeur (mémo interne, jamais affiché publiquement)</label>
       <input style={field} name="sellerDiscord" placeholder="Ex: pseudo#1234 ou @pseudo" />
 
+      <label style={label}>Email du vendeur (mémo interne, optionnel)</label>
+      <input style={field} name="sellerEmail" type="email" placeholder="vendeur@example.com" />
+
+      <label style={label}>Téléphone du vendeur (mémo interne, optionnel, avec indicatif)</label>
+      <input style={field} name="sellerPhone" type="tel" placeholder="+33 6 12 34 56 78" />
+
       <label style={label}>Note (0–5, optionnel)</label>
       <input style={field} name="rating" type="number" step="0.1" placeholder="4.8" />
 

@@ -11,7 +11,9 @@ export async function updateListing(formData: FormData) {
   const price = Number(formData.get("price") ?? 0);
   const level = Number(formData.get("level") ?? 0);
   const sellerName = String(formData.get("sellerName") ?? "");
-  const sellerDiscord = String(formData.get("sellerDiscord") ?? "");
+  const sellerDiscord = String(formData.get("sellerDiscord") ?? "") || null;
+  const sellerEmail = String(formData.get("sellerEmail") ?? "") || null;
+  const sellerPhone = String(formData.get("sellerPhone") ?? "") || null;
   const verified = formData.get("verified") === "on";
   const rating = formData.get("rating") ? Number(formData.get("rating")) : null;
   const statLine = String(formData.get("statLine") ?? "");
@@ -57,6 +59,8 @@ export async function updateListing(formData: FormData) {
       level,
       sellerName,
       sellerDiscord,
+      sellerEmail,
+      sellerPhone,
       verified,
       rating,
       statLine,
