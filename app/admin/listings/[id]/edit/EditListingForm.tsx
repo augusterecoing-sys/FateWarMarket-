@@ -3,6 +3,7 @@
 import { useRef, useState } from "react";
 import { upload } from "@vercel/blob/client";
 import { updateListing } from "./actions";
+import { ACCOUNT_TYPES } from "@/lib/accountTypes";
 
 const field: React.CSSProperties = { display: "block", width: "100%", padding: 10, marginBottom: 14 };
 const label: React.CSSProperties = { display: "block", fontSize: 13, marginBottom: 4, fontWeight: 600 };
@@ -24,6 +25,7 @@ type Listing = {
   level: number;
   sellerName: string;
   sellerDiscord: string | null;
+  accountType: string | null;
   verified: boolean;
   rating: number | null;
   statLine: string;
@@ -104,6 +106,14 @@ export default function EditListingForm({ listing }: { listing: Listing }) {
 
       <label style={label}>Résumé (affiché sur la carte)</label>
       <input style={field} name="statLine" required defaultValue={listing.statLine} />
+
+      <label style={label}>Type de compte (optionnel)</label>
+      <select style={field} name="accountType" defaultValue={listing.accountType ?? ""}>
+        <option value="">Non précisé</option>
+        {ACCOUNT_TYPES.map((t) => (
+          <option key={t.value} value={t.value}>{t.label}</option>
+        ))}
+      </select>
 
       <label style={label}>Étiquette (optionnel)</label>
       <input style={field} name="tag" defaultValue={listing.tag ?? ""} />

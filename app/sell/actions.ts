@@ -12,11 +12,15 @@ export async function createPublicListing(formData: FormData) {
   const sellerName = String(formData.get("sellerName") ?? "");
   const sellerDiscord = String(formData.get("sellerDiscord") ?? "");
   const statLine = String(formData.get("statLine") ?? "");
+  const accountType = String(formData.get("accountType") ?? "");
   const middleman = formData.get("middleman") === "on";
   const troopsInfo = String(formData.get("troopsInfo") ?? "");
 
   if (!title || !sellerName || !sellerDiscord || !statLine || !price || !level) {
     throw new Error("Please fill in all required fields.");
+  }
+  if (!["archers", "berserker", "cavalry"].includes(accountType)) {
+    throw new Error("Please confirm your account type.");
   }
 
   const uploadedImagesRaw = String(formData.get("uploadedImages") ?? "[]");
@@ -44,6 +48,7 @@ export async function createPublicListing(formData: FormData) {
       level,
       sellerName,
       sellerDiscord,
+      accountType,
       verified: false,
       rating: null,
       statLine,

@@ -15,6 +15,7 @@ model Listing {
   level      Int
   sellerName String
   sellerDiscord String? // mémo interne : pseudo Discord du vendeur, jamais affiché publiquement
+  accountType String? // archers | berserker | cavalry — type de compte confirmé par le vendeur
   verified   Boolean  @default(false)
   rating     Float?
   statLine   String // ex: "120 Skins · 45 Characters · High Rune Collection"

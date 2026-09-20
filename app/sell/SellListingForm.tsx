@@ -3,6 +3,7 @@
 import { useRef, useState } from "react";
 import { upload } from "@vercel/blob/client";
 import { createPublicListing } from "./actions";
+import { ACCOUNT_TYPES } from "@/lib/accountTypes";
 
 const field: React.CSSProperties = {
   display: "block",
@@ -43,9 +44,10 @@ export default function SellListingForm() {
   const [progressText, setProgressText] = useState("");
   const [error, setError] = useState("");
   const [counts, setCounts] = useState<Record<string, number>>({});
+  const [accountType, setAccountType] = useState("");
 
   const missingRequired = CATEGORY_FIELDS.filter((c) => c.required && !(counts[c.field] > 0));
-  const canSubmit = missingRequired.length === 0 && !uploading;
+  const canSubmit = missingRequired.length === 0 && accountType !== "" && !uploading;
 
   function handleFileChange(fieldName: string, files: FileList | null) {
     setCounts((prev) => ({ ...prev, [fieldName]: files ? files.length : 0 }));
@@ -56,8 +58,12 @@ export default function SellListingForm() {
     if (!formRef.current) return;
     setError("");
 
-    if (missingRequired.length > 0) {
-      setError(`Please add at least one photo for: ${missingRequired.map((c) => c.label).join(", ")}.`);
+    if (missingRequired.length > 0 || accountType === "") {
+      const parts = [
+        ...missingRequired.map((c) => c.label),
+        ...(accountType === "" ? ["your account type"] : []),
+      ];
+      setError(`Please fill in: ${parts.join(", ")}.`);
       return;
     }
 
@@ -109,6 +115,40 @@ export default function SellListingForm() {
 
       <label style={label}>Summary (shown on the listing card)</label>
       <input style={field} name="statLine" required placeholder="120 Skins · 45 Characters · High Rune Collection" />
+
+      <div style={section}>Account type</div>
+      <p style={{ fontSize: 13, color: "#9C9186", marginTop: -2, marginBottom: 14, lineHeight: 1.6 }}>
+        Confirm your account's main build so buyers can filter with more precision. <span style={{ color: "#E2622B" }}>Required.</span>
+      </p>
+      <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 20 }}>
+        {ACCOUNT_TYPES.map((t) => (
+          <label
+            key={t.value}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 10,
+              fontSize: 14.5,
+              color: "#F3E9DA",
+              background: "#1D1812",
+              border: `1px solid ${accountType === t.value ? "#E2622B" : "rgba(243,233,218,0.15)"}`,
+              borderRadius: 8,
+              padding: "12px 14px",
+              cursor: "pointer",
+            }}
+          >
+            <input
+              type="radio"
+              name="accountType"
+              value={t.value}
+              checked={accountType === t.value}
+              onChange={() => setAccountType(t.value)}
+              required
+            />
+            {t.label}
+          </label>
+        ))}
+      </div>
 
       <div style={section}>Photos by category</div>
       <p style={{ fontSize: 13, color: "#9C9186", marginTop: -2, marginBottom: 18, lineHeight: 1.6 }}>

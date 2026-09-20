@@ -15,6 +15,7 @@ export async function updateListing(formData: FormData) {
   const verified = formData.get("verified") === "on";
   const rating = formData.get("rating") ? Number(formData.get("rating")) : null;
   const statLine = String(formData.get("statLine") ?? "");
+  const accountType = String(formData.get("accountType") ?? "") || null;
   const tag = String(formData.get("tag") ?? "");
   const middleman = formData.get("middleman") === "on";
   const featured = formData.get("featured") === "on";
@@ -59,6 +60,7 @@ export async function updateListing(formData: FormData) {
       verified,
       rating,
       statLine,
+      accountType,
       tag,
       middleman,
       featured,

@@ -2,6 +2,7 @@ import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import ImageGallery from "@/components/ImageGallery";
 import BuyButton from "@/components/BuyButton";
+import { accountTypeLabel } from "@/lib/accountTypes";
 
 export const dynamic = "force-dynamic";
 
@@ -59,6 +60,22 @@ export default async function AccountDetail({
               </div>
             )}
             <h1 style={{ fontFamily: "'Bricolage Grotesque',sans-serif", fontSize: 26, fontWeight: 700, margin: "0 0 8px" }}>{listing.title}</h1>
+            {accountTypeLabel(listing.accountType) && (
+              <div
+                style={{
+                  display: "inline-block",
+                  background: "rgba(226,98,43,0.12)",
+                  color: "#E2622B",
+                  fontSize: 12,
+                  fontWeight: 700,
+                  padding: "4px 10px",
+                  borderRadius: 5,
+                  marginBottom: 10,
+                }}
+              >
+                {accountTypeLabel(listing.accountType)}
+              </div>
+            )}
             <div style={{ fontSize: 14, color: "#9C9186" }}>
               {listing.sellerName}{listing.verified ? " ✓ Verified" : ""}
               {listing.rating != null ? ` · ★ ${listing.rating}` : ""}
@@ -67,7 +84,7 @@ export default async function AccountDetail({
           </div>
           <div style={{ textAlign: "right" }}>
             <div style={{ fontFamily: "'Bricolage Grotesque',sans-serif", fontSize: 32, fontWeight: 700, color: "#F0793B" }}>${listing.price}</div>
-            <BuyButton middlemanAvailable={listing.middleman} />
+            <BuyButton listingId={listing.id} listingTitle={listing.title} middlemanAvailable={listing.middleman} />
             {listing.middleman && (
               <div style={{ fontSize: 12.5, color: "#C9A227", marginTop: 8 }}>Middleman available for this account</div>
             )}

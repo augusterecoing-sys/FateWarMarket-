@@ -1,9 +1,12 @@
+import { accountTypeLabel } from "@/lib/accountTypes";
+
 type Props = {
   id: string;
   title: string;
   price: number;
   level: number;
   sellerName: string;
+  accountType?: string | null;
   verified: boolean;
   rating: number | null;
   statLine: string;
@@ -18,6 +21,7 @@ export default function AccountCard({
   price,
   level,
   sellerName,
+  accountType,
   verified,
   rating,
   statLine,
@@ -27,6 +31,7 @@ export default function AccountCard({
   imageLabel,
 }: Props) {
   const initial = sellerName.charAt(0).toUpperCase() || "?";
+  const typeLabel = accountTypeLabel(accountType);
 
   return (
     <div
@@ -149,6 +154,22 @@ export default function AccountCard({
         <div style={{ fontFamily: "'Manrope',sans-serif", fontSize: 13, color: "#9C9186", lineHeight: 1.5 }}>
           {statLine}
         </div>
+        {typeLabel && (
+          <div
+            style={{
+              alignSelf: "flex-start",
+              background: "rgba(226,98,43,0.12)",
+              color: "#E2622B",
+              fontFamily: "'Manrope',sans-serif",
+              fontSize: 11.5,
+              fontWeight: 700,
+              padding: "3px 9px",
+              borderRadius: 5,
+            }}
+          >
+            {typeLabel}
+          </div>
+        )}
         <div
           style={{
             display: "flex",

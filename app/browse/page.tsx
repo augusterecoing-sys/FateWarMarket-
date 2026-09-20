@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import AccountCard from "@/components/AccountCard";
+import { ACCOUNT_TYPES } from "@/lib/accountTypes";
 import type { Prisma } from "@prisma/client";
 
 export const dynamic = "force-dynamic";
@@ -27,25 +28,38 @@ export default async function Browse({
   const maxParam = searchParams.max ? Number(searchParams.max) : undefined;
   const verifiedOnly = searchParams.verified === "1";
   const middlemanOnly = searchParams.middleman === "1";
+  const selectedTypes = toArray(searchParams.type).filter((t) => ACCOUNT_TYPES.some((at) => at.value === t));
 
-  const where: Prisma.ListingWhereInput = { status: "active" };
+  const andConditions: Prisma.ListingWhereInput[] = [];
 
   if (selectedBands.length > 0) {
-    where.OR = selectedBands.map((key) => {
-      const band = BANDS[key];
-      const range: Prisma.ListingWhereInput = {};
-      if (band.min !== undefined) range.price = { ...(range.price as object), gte: band.min };
-      if (band.max !== undefined) range.price = { ...(range.price as object), lte: band.max };
-      return range;
+    andConditions.push({
+      OR: selectedBands.map((key) => {
+        const band = BANDS[key];
+        const range: Prisma.ListingWhereInput = {};
+        if (band.min !== undefined) range.price = { ...(range.price as object), gte: band.min };
+        if (band.max !== undefined) range.price = { ...(range.price as object), lte: band.max };
+        return range;
+      }),
     });
   } else if (minParam !== undefined || maxParam !== undefined) {
-    where.price = {};
-    if (minParam !== undefined) (where.price as Prisma.IntFilter).gte = minParam;
-    if (maxParam !== undefined) (where.price as Prisma.IntFilter).lte = maxParam;
+    const priceFilter: Prisma.IntFilter = {};
+    if (minParam !== undefined) priceFilter.gte = minParam;
+    if (maxParam !== undefined) priceFilter.lte = maxParam;
+    andConditions.push({ price: priceFilter });
   }
 
-  if (verifiedOnly) where.verified = true;
-  if (middlemanOnly) where.middleman = true;
+  if (selectedTypes.length > 0) {
+    andConditions.push({ OR: selectedTypes.map((t) => ({ accountType: t })) });
+  }
+
+  if (verifiedOnly) andConditions.push({ verified: true });
+  if (middlemanOnly) andConditions.push({ middleman: true });
+
+  const where: Prisma.ListingWhereInput = {
+    status: "active",
+    ...(andConditions.length > 0 ? { AND: andConditions } : {}),
+  };
 
   const listings = await prisma.listing.findMany({
     where,
@@ -54,6 +68,7 @@ export default async function Browse({
   });
 
   const isBandChecked = (key: string) => selectedBands.includes(key);
+  const isTypeChecked = (key: string) => selectedTypes.includes(key);
 
   return (
     <main>
@@ -120,6 +135,16 @@ export default async function Browse({
           </div>
 
           <div style={{ display: "flex", flexDirection: "column", gap: 10, paddingTop: 18, borderTop: "1px solid rgba(243,233,218,0.08)" }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: "#F3E9DA", marginBottom: 2 }}>Account type</div>
+            {ACCOUNT_TYPES.map((t) => (
+              <label key={t.value} style={{ display: "flex", alignItems: "center", gap: 9, fontSize: 13.5, color: "#D8CFC2" }}>
+                <input type="checkbox" name="type" value={t.value} defaultChecked={isTypeChecked(t.value)} />
+                {t.label}
+              </label>
+            ))}
+          </div>
+
+          <div style={{ display: "flex", flexDirection: "column", gap: 10, paddingTop: 18, borderTop: "1px solid rgba(243,233,218,0.08)" }}>
             <div style={{ fontSize: 13, fontWeight: 700, color: "#F3E9DA", marginBottom: 2 }}>Account characteristics</div>
             <label style={{ display: "flex", alignItems: "center", gap: 9, fontSize: 13.5, color: "#D8CFC2" }}>
               <input type="checkbox" name="verified" value="1" defaultChecked={verifiedOnly} />
@@ -158,6 +183,7 @@ export default async function Browse({
                     price={item.price}
                     level={item.level}
                     sellerName={item.sellerName}
+                    accountType={item.accountType}
                     verified={item.verified}
                     rating={item.rating}
                     statLine={item.statLine}
