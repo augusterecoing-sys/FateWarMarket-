@@ -51,7 +51,23 @@ directement dans un tableau, sans passer par le formulaire).
 
 Ton site est en ligne. Pour ajouter une annonce : va sur `tonsite.vercel.app/admin/login`.
 
-## Ce qui manque encore (volontairement, pour rester simple pour l'instant)
+## 5. Connecter Discord (pour la page Middleman et les pages compte)
+
+1. Dans Discord, ouvre ton serveur → clique droit sur le nom du serveur → **Inviter des gens**.
+2. Copie le lien (`https://discord.gg/...`), avec une expiration "Ne jamais expirer" si possible.
+3. Mets-le dans `DISCORD_INVITE_URL` (`.env` local ET variables d'environnement Vercel), puis redéploie.
+
+La page "Vendre son compte" n'a besoin d'aucune configuration : elle indique simplement d'ajouter **0panda_roux0** en ami sur Discord.
+
+## 6. Après une mise à jour du schéma de base de données
+
+Si un jour le fichier `prisma/schema.prisma` change (nouveaux champs), il faut resynchroniser la base :
+
+```bash
+npx prisma generate
+npm run db:push
+```
+
 
 - Le design complet du mockup n'est pas encore branché sur `/browse` — c'est du HTML brut pour
   l'instant, pour vérifier que la base fonctionne d'abord.

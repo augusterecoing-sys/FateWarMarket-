@@ -2,6 +2,7 @@ import { createListing } from "./actions";
 
 const field: React.CSSProperties = { display: "block", width: "100%", padding: 10, marginBottom: 14 };
 const label: React.CSSProperties = { display: "block", fontSize: 13, marginBottom: 4, fontWeight: 600 };
+const section: React.CSSProperties = { marginTop: 28, marginBottom: 10, fontSize: 15, fontWeight: 700, borderTop: "1px solid #ddd", paddingTop: 20 };
 
 export default function NewListing() {
   return (
@@ -23,22 +24,43 @@ export default function NewListing() {
         <label style={label}>Note (0–5, optionnel)</label>
         <input style={field} name="rating" type="number" step="0.1" placeholder="4.8" />
 
-        <label style={label}>Ligne de statistiques</label>
+        <label style={label}>Résumé (affiché sur la carte)</label>
         <input style={field} name="statLine" required placeholder="120 Skins · 45 Characters · High Rune Collection" />
-
-        <label style={label}>Catégorie de l'image principale</label>
-        <input style={field} name="imageLabel" placeholder="Account overview" />
 
         <label style={label}>Étiquette (optionnel)</label>
         <input style={field} name="tag" placeholder="Featured" />
 
-        <label style={label}>Photos du compte (depuis ton ordinateur)</label>
-        <input style={field} name="photos" type="file" accept="image/*" multiple />
+        <div style={section}>Photos par catégorie</div>
+        <p style={{ fontSize: 13, color: "#666", marginTop: -4, marginBottom: 16 }}>
+          Chaque catégorie devient un onglet sur la page du compte. Laisse vide celles que tu n'as pas.
+        </p>
 
-        <label style={label}>Ou des liens d'images externes (optionnel, un par ligne)</label>
-        <textarea style={{ ...field, height: 80 }} name="imageUrls" placeholder={"https://...\nhttps://..."} />
+        <label style={label}>Vue d'ensemble</label>
+        <input style={field} name="photos_overview" type="file" accept="image/*" multiple />
 
-        <label style={{ display: "flex", gap: 8, marginBottom: 10 }}>
+        <label style={label}>Personnages / Héros</label>
+        <input style={field} name="photos_characters" type="file" accept="image/*" multiple />
+
+        <label style={label}>Runes</label>
+        <input style={field} name="photos_runes" type="file" accept="image/*" multiple />
+
+        <label style={label}>Équipement</label>
+        <input style={field} name="photos_equipment" type="file" accept="image/*" multiple />
+
+        <label style={label}>Sac à dos / Inventaire</label>
+        <input style={field} name="photos_inventory" type="file" accept="image/*" multiple />
+
+        <label style={label}>Skins</label>
+        <input style={field} name="photos_skins" type="file" accept="image/*" multiple />
+
+        <div style={section}>Infos & troupes</div>
+        <label style={label}>Nombre de troupes, infos complémentaires</label>
+        <textarea style={{ ...field, height: 90 }} name="troopsInfo" placeholder="Ex : 12 000 troupes, niveau de château 25, serveur EU..." />
+
+        <label style={label}>Ou des liens d'images externes (optionnel, un par ligne, catégorie "vue d'ensemble")</label>
+        <textarea style={{ ...field, height: 70 }} name="imageUrls" placeholder={"https://...\nhttps://..."} />
+
+        <label style={{ display: "flex", gap: 8, marginBottom: 10, marginTop: 20 }}>
           <input type="checkbox" name="verified" /> Vendeur vérifié
         </label>
         <label style={{ display: "flex", gap: 8, marginBottom: 10 }}>

@@ -4,6 +4,15 @@ import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 import { put } from "@vercel/blob";
 
+const CATEGORY_FIELDS: { field: string; category: string }[] = [
+  { field: "photos_overview", category: "overview" },
+  { field: "photos_characters", category: "characters" },
+  { field: "photos_runes", category: "runes" },
+  { field: "photos_equipment", category: "equipment" },
+  { field: "photos_inventory", category: "inventory" },
+  { field: "photos_skins", category: "skins" },
+];
+
 export async function createListing(formData: FormData) {
   const title = String(formData.get("title") ?? "");
   const price = Number(formData.get("price") ?? 0);
@@ -12,34 +21,37 @@ export async function createListing(formData: FormData) {
   const verified = formData.get("verified") === "on";
   const rating = formData.get("rating") ? Number(formData.get("rating")) : null;
   const statLine = String(formData.get("statLine") ?? "");
-  const imageLabel = String(formData.get("imageLabel") ?? "");
   const tag = String(formData.get("tag") ?? "");
   const middleman = formData.get("middleman") === "on";
   const featured = formData.get("featured") === "on";
+  const troopsInfo = String(formData.get("troopsInfo") ?? "");
 
-  // 1) Vraies photos uploadées depuis l'ordinateur
-  const photoFiles = formData
-    .getAll("photos")
-    .filter((f): f is File => f instanceof File && f.size > 0);
+  type ImageInput = { url: string; category: string; sortOrder: number };
+  const imagesToCreate: ImageInput[] = [];
+  let order = 0;
 
-  const uploadedUrls: string[] = [];
-  for (const file of photoFiles) {
-    const blob = await put(`listings/${Date.now()}-${file.name}`, file, {
-      access: "public",
-    });
-    uploadedUrls.push(blob.url);
+  for (const { field, category } of CATEGORY_FIELDS) {
+    const files = formData
+      .getAll(field)
+      .filter((f): f is File => f instanceof File && f.size > 0);
+    for (const file of files) {
+      const blob = await put(`listings/${category}/${Date.now()}-${file.name}`, file, {
+        access: "public",
+      });
+      imagesToCreate.push({ url: blob.url, category, sortOrder: order++ });
+    }
   }
 
-  // 2) Liens externes collés (optionnel, en complément)
   const imageUrlsRaw = String(formData.get("imageUrls") ?? "");
   const pastedUrls = imageUrlsRaw
     .split("\n")
     .map((u) => u.trim())
     .filter(Boolean);
+  for (const url of pastedUrls) {
+    imagesToCreate.push({ url, category: "overview", sortOrder: order++ });
+  }
 
-  const allImageUrls = [...uploadedUrls, ...pastedUrls];
-
-  await prisma.listing.create({
+  const listing = await prisma.listing.create({
     data: {
       title,
       price,
@@ -48,15 +60,14 @@ export async function createListing(formData: FormData) {
       verified,
       rating,
       statLine,
-      imageLabel,
+      imageLabel: imagesToCreate.length === 0 ? "Account overview" : null,
       tag,
       middleman,
       featured,
-      images: {
-        create: allImageUrls.map((url, i) => ({ url, sortOrder: i })),
-      },
+      troopsInfo,
+      images: { create: imagesToCreate },
     },
   });
 
-  redirect("/browse");
+  redirect(`/browse/${listing.id}`);
 }

@@ -23,6 +23,8 @@ export default async function Home() {
         </a>
         <nav style={{ display: "flex", gap: 32 }}>
           <a href="/browse" style={navLink}>Browse Accounts</a>
+          <a href="/sell" style={navLink}>Sell an Account</a>
+          <a href="/middleman" style={navLink}>Middleman</a>
         </nav>
       </header>
 
@@ -40,6 +42,18 @@ export default async function Home() {
         </a>
       </section>
 
+      {/* Browse by price */}
+      <section style={{ padding: "0 5% 60px", maxWidth: 1200, margin: "0 auto" }}>
+        <h2 style={{ fontSize: 20, fontWeight: 700, margin: "0 0 18px" }}>Browse by budget</h2>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(5, minmax(0, 1fr))", gap: 14 }}>
+          <a href="/browse?band=under100" style={{ background: "#1D1812", border: "1px solid rgba(243,233,218,0.09)", borderRadius: 10, padding: "18px 14px", textAlign: "center", fontSize: 14, fontWeight: 600, color: "#F3E9DA", textDecoration: "none" }}>Under $100</a>
+          <a href="/browse?band=100-250" style={{ background: "#1D1812", border: "1px solid rgba(243,233,218,0.09)", borderRadius: 10, padding: "18px 14px", textAlign: "center", fontSize: 14, fontWeight: 600, color: "#F3E9DA", textDecoration: "none" }}>$100 – $250</a>
+          <a href="/browse?band=250-500" style={{ background: "#1D1812", border: "1px solid rgba(243,233,218,0.09)", borderRadius: 10, padding: "18px 14px", textAlign: "center", fontSize: 14, fontWeight: 600, color: "#F3E9DA", textDecoration: "none" }}>$250 – $500</a>
+          <a href="/browse?band=500-1000" style={{ background: "#1D1812", border: "1px solid rgba(243,233,218,0.09)", borderRadius: 10, padding: "18px 14px", textAlign: "center", fontSize: 14, fontWeight: 600, color: "#F3E9DA", textDecoration: "none" }}>$500 – $1,000</a>
+          <a href="/browse?band=1000plus" style={{ background: "#1D1812", border: "1px solid rgba(201,162,39,0.35)", borderRadius: 10, padding: "18px 14px", textAlign: "center", fontSize: 14, fontWeight: 600, color: "#C9A227", textDecoration: "none" }}>$1,000+</a>
+        </div>
+      </section>
+
       {/* Featured */}
       <section style={{ padding: "16px 5% 80px", maxWidth: 1200, margin: "0 auto" }}>
         <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", marginBottom: 22 }}>
@@ -52,7 +66,7 @@ export default async function Home() {
         ) : (
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: 24 }}>
             {featured.map((item) => (
-              <a key={item.id} href="/browse" style={{ textDecoration: "none", color: "inherit" }}>
+              <a key={item.id} href={`/browse/${item.id}`} style={{ textDecoration: "none", color: "inherit" }}>
                 <AccountCard
                   id={item.id}
                   title={item.title}

@@ -22,6 +22,7 @@ model Listing {
   middleman  Boolean  @default(true)
   featured   Boolean  @default(false)
   status     String   @default("active") // active | sold | removed
+  troopsInfo String? // texte libre : nombre de troupes, infos complémentaires
   createdAt  DateTime @default(now())
   images     ListingImage[]
 }
