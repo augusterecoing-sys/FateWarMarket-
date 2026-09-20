@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
+import ImageGallery from "@/components/ImageGallery";
 
 export const dynamic = "force-dynamic";
 
@@ -116,18 +117,7 @@ export default async function AccountDetail({
             No screenshots in this category yet.
           </div>
         ) : (
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: 14 }}>
-            {imagesForTab.map((img) => (
-              <a key={img.id} href={img.url} target="_blank" rel="noopener noreferrer">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={img.url}
-                  alt={listing.title}
-                  style={{ width: "100%", height: 160, objectFit: "cover", borderRadius: 10, border: "1px solid rgba(243,233,218,0.1)", cursor: "pointer" }}
-                />
-              </a>
-            ))}
-          </div>
+          <ImageGallery images={imagesForTab} title={listing.title} />
         )}
       </div>
     </main>
