@@ -64,6 +64,16 @@ export default async function Home() {
         </div>
       </section>
 
+      {/* Browse by account type */}
+      <section style={{ padding: "0 5% 60px", maxWidth: 1200, margin: "0 auto" }}>
+        <h2 style={{ fontSize: 20, fontWeight: 700, margin: "0 0 18px" }}>Browse by account type</h2>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: 14 }}>
+          <a href="/browse?type=cavalry" style={{ background: "#1D1812", border: "1px solid rgba(243,233,218,0.09)", borderRadius: 10, padding: "18px 14px", textAlign: "center", fontSize: 14, fontWeight: 600, color: "#F3E9DA", textDecoration: "none" }}>Cavalry</a>
+          <a href="/browse?type=berserker" style={{ background: "#1D1812", border: "1px solid rgba(243,233,218,0.09)", borderRadius: 10, padding: "18px 14px", textAlign: "center", fontSize: 14, fontWeight: 600, color: "#F3E9DA", textDecoration: "none" }}>Berserker</a>
+          <a href="/browse?type=archers" style={{ background: "#1D1812", border: "1px solid rgba(243,233,218,0.09)", borderRadius: 10, padding: "18px 14px", textAlign: "center", fontSize: 14, fontWeight: 600, color: "#F3E9DA", textDecoration: "none" }}>Archers</a>
+        </div>
+      </section>
+
       {/* Featured */}
       <section style={{ padding: "16px 5% 80px", maxWidth: 1200, margin: "0 auto" }}>
         <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", marginBottom: 22 }}>
