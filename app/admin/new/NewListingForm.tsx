@@ -80,13 +80,15 @@ export default function NewListingForm() {
       <label style={label}>Résumé (affiché sur la carte)</label>
       <input style={field} name="statLine" required placeholder="120 Skins · 45 Characters · High Rune Collection" />
 
-      <label style={label}>Type de compte (optionnel)</label>
-      <select style={field} name="accountType" defaultValue="">
-        <option value="">Non précisé</option>
+      <label style={label}>Type de compte</label>
+      <div style={{ display: "flex", gap: 14, marginBottom: 14 }}>
         {ACCOUNT_TYPES.map((t) => (
-          <option key={t.value} value={t.value}>{t.label}</option>
+          <label key={t.value} style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 14, fontWeight: 400 }}>
+            <input type="radio" name="accountType" value={t.value} required />
+            {t.label}
+          </label>
         ))}
-      </select>
+      </div>
 
       <label style={label}>Étiquette (optionnel)</label>
       <input style={field} name="tag" placeholder="Featured" />
