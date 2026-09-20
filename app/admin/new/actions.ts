@@ -2,16 +2,6 @@
 
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
-import { put } from "@vercel/blob";
-
-const CATEGORY_FIELDS: { field: string; category: string }[] = [
-  { field: "photos_overview", category: "overview" },
-  { field: "photos_characters", category: "characters" },
-  { field: "photos_runes", category: "runes" },
-  { field: "photos_equipment", category: "equipment" },
-  { field: "photos_inventory", category: "inventory" },
-  { field: "photos_skins", category: "skins" },
-];
 
 export async function createListing(formData: FormData) {
   const title = String(formData.get("title") ?? "");
@@ -26,20 +16,13 @@ export async function createListing(formData: FormData) {
   const featured = formData.get("featured") === "on";
   const troopsInfo = String(formData.get("troopsInfo") ?? "");
 
-  type ImageInput = { url: string; category: string; sortOrder: number };
-  const imagesToCreate: ImageInput[] = [];
-  let order = 0;
-
-  for (const { field, category } of CATEGORY_FIELDS) {
-    const files = formData
-      .getAll(field)
-      .filter((f): f is File => f instanceof File && f.size > 0);
-    for (const file of files) {
-      const blob = await put(`listings/${category}/${Date.now()}-${file.name}`, file, {
-        access: "public",
-      });
-      imagesToCreate.push({ url: blob.url, category, sortOrder: order++ });
-    }
+  // Images déjà uploadées côté client (voir NewListingForm.tsx)
+  const uploadedImagesRaw = String(formData.get("uploadedImages") ?? "[]");
+  let uploadedImages: { url: string; category: string }[] = [];
+  try {
+    uploadedImages = JSON.parse(uploadedImagesRaw);
+  } catch {
+    uploadedImages = [];
   }
 
   const imageUrlsRaw = String(formData.get("imageUrls") ?? "");
@@ -47,9 +30,11 @@ export async function createListing(formData: FormData) {
     .split("\n")
     .map((u) => u.trim())
     .filter(Boolean);
-  for (const url of pastedUrls) {
-    imagesToCreate.push({ url, category: "overview", sortOrder: order++ });
-  }
+
+  const imagesToCreate = [
+    ...uploadedImages.map((img, i) => ({ url: img.url, category: img.category, sortOrder: i })),
+    ...pastedUrls.map((url, i) => ({ url, category: "overview", sortOrder: uploadedImages.length + i })),
+  ];
 
   const listing = await prisma.listing.create({
     data: {
