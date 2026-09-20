@@ -1,4 +1,4 @@
-const item: React.CSSProperties = { display: "flex", alignItems: "center", gap: 10, fontSize: 14.5, color: "#D8CFC2", padding: "10px 0", borderBottom: "1px solid rgba(243,233,218,0.08)" };
+import SellListingForm from "./SellListingForm";
 
 export default function Sell() {
   return (
@@ -17,24 +17,15 @@ export default function Sell() {
 
       <div style={{ maxWidth: 560, margin: "0 auto", padding: "48px 5% 80px" }}>
         <h1 style={{ fontFamily: "'Bricolage Grotesque',sans-serif", fontSize: 26, fontWeight: 700, marginBottom: 12 }}>Sell your account</h1>
-        <p style={{ fontSize: 15, color: "#D8CFC2", lineHeight: 1.7, marginBottom: 24 }}>
-          Add <strong style={{ color: "#F3E9DA" }}>0panda_roux0</strong> as a friend on Discord if you want to sell your account.
+        <p style={{ fontSize: 15, color: "#D8CFC2", lineHeight: 1.7, marginBottom: 32 }}>
+          Fill in the form below — your listing goes live as soon as you publish it. Screenshots for
+          the account profile, heroes, runes and equipment are required so buyers can trust the listing.
         </p>
 
-        <div style={{ background: "#1D1812", border: "1px solid rgba(243,233,218,0.1)", borderRadius: 12, padding: 24, marginBottom: 24 }}>
-          <div style={{ fontSize: 13, fontWeight: 700, color: "#9C9186", marginBottom: 6 }}>Send us the following</div>
-          <div style={item}>Account name</div>
-          <div style={item}>Characters / Heroes</div>
-          <div style={item}>Runes</div>
-          <div style={item}>Equipment</div>
-          <div style={item}>Inventory / Bag</div>
-          <div style={item}>Troops / other info</div>
-          <div style={item}>The price you want</div>
-          <div style={{ ...item, borderBottom: "none" }}>Whether you want to use the Middleman service</div>
-        </div>
+        <SellListingForm />
 
-        <p style={{ fontSize: 13.5, color: "#9C9186", lineHeight: 1.6 }}>
-          Screenshots for each category above are sent directly on Discord once we're in touch.
+        <p style={{ fontSize: 13, color: "#6E655B", lineHeight: 1.6, marginTop: 28, textAlign: "center" }}>
+          Prefer to send everything on Discord instead? Add <strong style={{ color: "#9C9186" }}>0panda_roux0</strong> as a friend.
         </p>
       </div>
     </main>

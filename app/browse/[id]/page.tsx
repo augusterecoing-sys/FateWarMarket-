@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import ImageGallery from "@/components/ImageGallery";
+import BuyButton from "@/components/BuyButton";
 
 export const dynamic = "force-dynamic";
 
@@ -66,12 +67,7 @@ export default async function AccountDetail({
           </div>
           <div style={{ textAlign: "right" }}>
             <div style={{ fontFamily: "'Bricolage Grotesque',sans-serif", fontSize: 32, fontWeight: 700, color: "#F0793B" }}>${listing.price}</div>
-            <a
-              href="/contact"
-              style={{ display: "inline-block", marginTop: 10, background: "#5865F2", color: "#fff", fontSize: 13.5, fontWeight: 700, padding: "10px 18px", borderRadius: 8, textDecoration: "none" }}
-            >
-              Contact seller on Discord
-            </a>
+            <BuyButton middlemanAvailable={listing.middleman} />
             {listing.middleman && (
               <div style={{ fontSize: 12.5, color: "#C9A227", marginTop: 8 }}>Middleman available for this account</div>
             )}
