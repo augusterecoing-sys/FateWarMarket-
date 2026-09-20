@@ -1,0 +1,36 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DATABASE_URL_UNPOOLED")
+}
+
+model Listing {
+  id         String   @id @default(cuid())
+  title      String
+  price      Int // en dollars, entier (ex: 425)
+  level      Int
+  sellerName String
+  verified   Boolean  @default(false)
+  rating     Float?
+  statLine   String // ex: "120 Skins · 45 Characters · High Rune Collection"
+  imageLabel String? // ex: "Account overview" (placeholder tant que pas de vraies captures)
+  tag        String? // ex: "Featured", ou vide
+  middleman  Boolean  @default(true)
+  featured   Boolean  @default(false)
+  status     String   @default("active") // active | sold | removed
+  createdAt  DateTime @default(now())
+  images     ListingImage[]
+}
+
+model ListingImage {
+  id        String  @id @default(cuid())
+  listingId String
+  listing   Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  url       String
+  category  String? // overview | characters | runes | inventory | equipment | skins | other
+  sortOrder Int     @default(0)
+}

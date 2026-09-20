@@ -1,0 +1,82 @@
+import { prisma } from "@/lib/prisma";
+import AccountCard from "@/components/AccountCard";
+
+export const dynamic = "force-dynamic";
+
+const navLink: React.CSSProperties = { fontSize: 14, fontWeight: 600, color: "#F3E9DA", textDecoration: "none" };
+
+export default async function Home() {
+  const featured = await prisma.listing.findMany({
+    where: { status: "active" },
+    orderBy: { createdAt: "desc" },
+    take: 3,
+    include: { images: { orderBy: { sortOrder: "asc" }, take: 1 } },
+  });
+
+  return (
+    <main>
+      {/* Header */}
+      <header style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "22px 5%", borderBottom: "1px solid rgba(243,233,218,0.08)" }}>
+        <a href="/" style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none", color: "inherit" }}>
+          <div style={{ width: 30, height: 30, borderRadius: 7, background: "#E2622B", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'Bricolage Grotesque',sans-serif", fontWeight: 800, fontSize: 15, color: "#14110D" }}>F</div>
+          <div style={{ fontFamily: "'Bricolage Grotesque',sans-serif", fontWeight: 700, fontSize: 17 }}>Fate War Market</div>
+        </a>
+        <nav style={{ display: "flex", gap: 32 }}>
+          <a href="/browse" style={navLink}>Browse Accounts</a>
+        </nav>
+      </header>
+
+      {/* Hero */}
+      <section style={{ padding: "80px 5%", maxWidth: 700, margin: "0 auto", textAlign: "center", display: "flex", flexDirection: "column", gap: 22, alignItems: "center" }}>
+        <div style={{ color: "#C9A227", fontSize: 13, fontWeight: 600 }}>Fate War account marketplace</div>
+        <h1 style={{ fontFamily: "'Bricolage Grotesque',sans-serif", fontSize: 40, fontWeight: 700, lineHeight: 1.15, margin: 0 }}>
+          Buy and sell Fate War accounts with proof, not promises.
+        </h1>
+        <p style={{ fontSize: 16, lineHeight: 1.6, color: "#9C9186", margin: 0 }}>
+          Real screenshots, real seller history, real account stats — before you offer a dollar.
+        </p>
+        <a href="/browse" style={{ background: "#E2622B", color: "#14110D", fontSize: 15, fontWeight: 700, padding: "14px 28px", borderRadius: 9, textDecoration: "none" }}>
+          Browse Accounts
+        </a>
+      </section>
+
+      {/* Featured */}
+      <section style={{ padding: "16px 5% 80px", maxWidth: 1200, margin: "0 auto" }}>
+        <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", marginBottom: 22 }}>
+          <h2 style={{ fontSize: 20, fontWeight: 700, margin: 0 }}>Recent accounts</h2>
+          <a href="/browse" style={{ fontSize: 14, fontWeight: 600, color: "#9C9186", textDecoration: "none" }}>View all →</a>
+        </div>
+
+        {featured.length === 0 ? (
+          <p style={{ color: "#9C9186" }}>No accounts listed yet — check back soon.</p>
+        ) : (
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: 24 }}>
+            {featured.map((item) => (
+              <a key={item.id} href="/browse" style={{ textDecoration: "none", color: "inherit" }}>
+                <AccountCard
+                  id={item.id}
+                  title={item.title}
+                  price={item.price}
+                  level={item.level}
+                  sellerName={item.sellerName}
+                  verified={item.verified}
+                  rating={item.rating}
+                  statLine={item.statLine}
+                  tag={item.tag}
+                  middleman={item.middleman}
+                  imageUrl={item.images[0]?.url}
+                  imageLabel={item.imageLabel}
+                />
+              </a>
+            ))}
+          </div>
+        )}
+      </section>
+
+      {/* Footer */}
+      <footer style={{ padding: "40px 5%", borderTop: "1px solid rgba(243,233,218,0.08)", textAlign: "center", fontSize: 12.5, color: "#6E655B" }}>
+        Fate War Market — an independent marketplace, not affiliated with the makers of Fate War.
+      </footer>
+    </main>
+  );
+}
