@@ -3,6 +3,8 @@ export const metadata = {
   description: "Fate War account marketplace",
 };
 
+import { Analytics } from "@vercel/analytics/react";
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
@@ -14,6 +16,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body style={{ margin: 0, background: "#14110D", color: "#F3E9DA", fontFamily: "'Manrope',sans-serif" }}>
         {children}
+        <Analytics />
       </body>
     </html>
   );
