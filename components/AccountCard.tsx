@@ -1,4 +1,4 @@
-import { accountTypeLabel } from "@/lib/accountTypes";
+import { accountTypeLabel, accountTypeIcon } from "@/lib/accountTypes";
 
 type Props = {
   id: string;
@@ -32,7 +32,6 @@ export default function AccountCard({
   images,
   imageLabel,
 }: Props) {
-  const initial = sellerName.charAt(0).toUpperCase() || "?";
   const typeLabel = accountTypeLabel(accountType);
   const gallery = images && images.length > 0 ? images.slice(0, 9) : imageUrl ? [imageUrl] : [];
 
@@ -141,17 +140,14 @@ export default function AccountCard({
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              fontFamily: "'Manrope',sans-serif",
-              fontSize: 12,
-              fontWeight: 700,
-              color: "#1A1208",
+              fontSize: 13,
               flexShrink: 0,
             }}
           >
-            {initial}
+            {accountTypeIcon(accountType)}
           </div>
           <div style={{ fontFamily: "'Manrope',sans-serif", fontSize: 14, fontWeight: 600, color: "#F3E9DA" }}>
-            {sellerName}
+            {typeLabel || "Account"}
           </div>
           {verified && (
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#C9A227" strokeWidth={2.4} strokeLinecap="round" strokeLinejoin="round">
@@ -167,22 +163,6 @@ export default function AccountCard({
         <div style={{ fontFamily: "'Manrope',sans-serif", fontSize: 13, color: "#9C9186", lineHeight: 1.5 }}>
           {statLine}
         </div>
-        {typeLabel && (
-          <div
-            style={{
-              alignSelf: "flex-start",
-              background: "rgba(226,98,43,0.12)",
-              color: "#E2622B",
-              fontFamily: "'Manrope',sans-serif",
-              fontSize: 11.5,
-              fontWeight: 700,
-              padding: "3px 9px",
-              borderRadius: 5,
-            }}
-          >
-            {typeLabel}
-          </div>
-        )}
         <div
           style={{
             display: "flex",
