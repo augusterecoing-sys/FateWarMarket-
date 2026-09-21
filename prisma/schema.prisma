@@ -53,7 +53,8 @@ model Message {
   conversationId String
   conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
   sender         String // "buyer" | "admin"
-  body           String
+  body           String? // texte du message ; optionnel si le message n'est qu'une image
+  imageUrl       String? // capture d'écran jointe au message, hébergée sur Vercel Blob
   listingId      String? // annonce concernée par ce message, si applicable
   listing        Listing?     @relation(fields: [listingId], references: [id], onDelete: SetNull)
   createdAt      DateTime     @default(now())

@@ -1,7 +1,9 @@
 import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import MarkAsRead from "@/components/MarkAsRead";
-import { sendAdminMessage, markConversationReadByAdmin } from "../actions";
+import DeleteConversationButton from "@/components/DeleteConversationButton";
+import AdminReplyForm from "../AdminReplyForm";
+import { markConversationReadByAdmin, deleteConversation } from "../actions";
 
 export const dynamic = "force-dynamic";
 
@@ -20,9 +22,12 @@ export default async function AdminConversation({ params }: { params: { id: stri
 
         <a href="/admin/messages" style={{ fontSize: 13, color: "#9C9186", textDecoration: "none" }}>← Toutes les conversations</a>
 
-        <h1 style={{ fontFamily: "'Bricolage Grotesque',sans-serif", fontSize: 22, fontWeight: 700, margin: "10px 0 24px" }}>
-          {conversation.buyerDiscord}
-        </h1>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", margin: "10px 0 24px", flexWrap: "wrap", gap: 12 }}>
+          <h1 style={{ fontFamily: "'Bricolage Grotesque',sans-serif", fontSize: 22, fontWeight: 700, margin: 0 }}>
+            {conversation.buyerDiscord}
+          </h1>
+          <DeleteConversationButton action={deleteConversation} conversationId={conversation.id} />
+        </div>
 
         <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
           {conversation.messages.map((m) => (
@@ -55,36 +60,21 @@ export default async function AdminConversation({ params }: { params: { id: stri
                   À propos de : {m.listing.title} ↗
                 </a>
               )}
-              <div style={{ whiteSpace: "pre-wrap" }}>{m.body}</div>
+              {m.imageUrl && (
+                <a href={m.imageUrl} target="_blank" style={{ display: "block", marginBottom: m.body ? 8 : 0 }}>
+                  <img
+                    src={m.imageUrl}
+                    alt="Capture jointe"
+                    style={{ display: "block", maxWidth: "100%", maxHeight: 420, width: "auto", height: "auto", borderRadius: 8, objectFit: "contain" }}
+                  />
+                </a>
+              )}
+              {m.body && <div style={{ whiteSpace: "pre-wrap" }}>{m.body}</div>}
             </div>
           ))}
         </div>
 
-        <form action={sendAdminMessage} style={{ display: "flex", gap: 10, marginTop: 20 }}>
-          <input type="hidden" name="conversationId" value={conversation.id} />
-          <textarea
-            name="body"
-            required
-            rows={2}
-            placeholder="Réponds à ce joueur..."
-            style={{
-              flex: 1,
-              padding: 10,
-              borderRadius: 8,
-              border: "1px solid rgba(243,233,218,0.15)",
-              background: "#1D1812",
-              color: "#F3E9DA",
-              fontSize: 14,
-              resize: "vertical",
-            }}
-          />
-          <button
-            type="submit"
-            style={{ background: "#E2622B", color: "#14110D", fontSize: 14, fontWeight: 700, padding: "0 18px", borderRadius: 8, border: "none", cursor: "pointer" }}
-          >
-            Envoyer
-          </button>
-        </form>
+        <AdminReplyForm conversationId={conversation.id} />
       </div>
     </main>
   );

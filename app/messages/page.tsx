@@ -80,7 +80,16 @@ export default async function MessagesPage({
                   {m.listing && (
                     <div style={{ fontSize: 11, opacity: 0.75, marginBottom: 4 }}>À propos de : {m.listing.title}</div>
                   )}
-                  <div style={{ whiteSpace: "pre-wrap" }}>{m.body}</div>
+                  {m.imageUrl && (
+                    <a href={m.imageUrl} target="_blank" style={{ display: "block", marginBottom: m.body ? 8 : 0 }}>
+                      <img
+                        src={m.imageUrl}
+                        alt="Capture jointe"
+                        style={{ display: "block", maxWidth: "100%", maxHeight: 420, width: "auto", height: "auto", borderRadius: 8, objectFit: "contain" }}
+                      />
+                    </a>
+                  )}
+                  {m.body && <div style={{ whiteSpace: "pre-wrap" }}>{m.body}</div>}
                 </div>
               ))}
             </div>

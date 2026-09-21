@@ -63,7 +63,7 @@ export default async function Browse({
 
   const listings = await prisma.listing.findMany({
     where,
-    orderBy: { createdAt: "desc" },
+    orderBy: [{ featured: "desc" }, { createdAt: "desc" }],
     include: { images: { orderBy: { sortOrder: "asc" }, take: 6 } },
   });
 

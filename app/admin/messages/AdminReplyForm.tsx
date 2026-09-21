@@ -2,9 +2,9 @@
 
 import { useRef, useState } from "react";
 import { upload } from "@vercel/blob/client";
-import { sendBuyerMessage } from "./actions";
+import { sendAdminMessage } from "./actions";
 
-export default function ReplyForm({ listingId }: { listingId?: string }) {
+export default function AdminReplyForm({ conversationId }: { conversationId: string }) {
   const [sending, setSending] = useState(false);
   const [preview, setPreview] = useState<string | null>(null);
   const formRef = useRef<HTMLFormElement>(null);
@@ -30,16 +30,16 @@ export default function ReplyForm({ listingId }: { listingId?: string }) {
             formData.set("imageUrl", blob.url);
           }
           formData.delete("screenshot");
-          await sendBuyerMessage(formData);
+          await sendAdminMessage(formData);
           formRef.current?.reset();
           setPreview(null);
         } finally {
           setSending(false);
         }
       }}
-      style={{ display: "flex", flexDirection: "column", gap: 8, marginTop: 16 }}
+      style={{ display: "flex", flexDirection: "column", gap: 8, marginTop: 20 }}
     >
-      {listingId && <input type="hidden" name="listingId" value={listingId} />}
+      <input type="hidden" name="conversationId" value={conversationId} />
 
       {preview && (
         <div style={{ position: "relative", display: "inline-block" }}>
@@ -61,7 +61,7 @@ export default function ReplyForm({ listingId }: { listingId?: string }) {
         <textarea
           name="body"
           rows={2}
-          placeholder="Écris ta réponse..."
+          placeholder="Réponds à ce joueur..."
           style={{
             flex: 1,
             padding: 10,
@@ -76,17 +76,7 @@ export default function ReplyForm({ listingId }: { listingId?: string }) {
         <button
           type="submit"
           disabled={sending}
-          style={{
-            background: "#E2622B",
-            color: "#14110D",
-            fontSize: 14,
-            fontWeight: 700,
-            padding: "0 18px",
-            borderRadius: 8,
-            border: "none",
-            cursor: sending ? "not-allowed" : "pointer",
-            opacity: sending ? 0.7 : 1,
-          }}
+          style={{ background: "#E2622B", color: "#14110D", fontSize: 14, fontWeight: 700, padding: "0 18px", borderRadius: 8, border: "none", cursor: sending ? "not-allowed" : "pointer", opacity: sending ? 0.7 : 1 }}
         >
           {sending ? "..." : "Envoyer"}
         </button>

@@ -31,14 +31,21 @@ export async function getConversationForBuyer() {
   });
 }
 
-export async function startConversation(buyerDiscord: string, firstMessage: string, listingId?: string) {
+type Attachment = { body?: string; imageUrl?: string };
+
+export async function startConversation(buyerDiscord: string, firstMessage: Attachment, listingId?: string) {
   const token = randomUUID();
   const conversation = await prisma.conversation.create({
     data: {
       token,
       buyerDiscord,
       messages: {
-        create: { sender: "buyer", body: firstMessage, listingId: listingId || undefined },
+        create: {
+          sender: "buyer",
+          body: firstMessage.body || undefined,
+          imageUrl: firstMessage.imageUrl || undefined,
+          listingId: listingId || undefined,
+        },
       },
     },
   });
@@ -46,14 +53,20 @@ export async function startConversation(buyerDiscord: string, firstMessage: stri
   return conversation;
 }
 
-export async function sendBuyerMessage(body: string, listingId?: string) {
+export async function sendBuyerMessage(message: Attachment, listingId?: string) {
   const token = getBuyerToken();
   if (!token) throw new Error("Aucune conversation active pour ce navigateur.");
   const conversation = await prisma.conversation.findUnique({ where: { token } });
   if (!conversation) throw new Error("Conversation introuvable.");
 
   await prisma.message.create({
-    data: { conversationId: conversation.id, sender: "buyer", body, listingId: listingId || undefined },
+    data: {
+      conversationId: conversation.id,
+      sender: "buyer",
+      body: message.body || undefined,
+      imageUrl: message.imageUrl || undefined,
+      listingId: listingId || undefined,
+    },
   });
   await prisma.conversation.update({
     where: { id: conversation.id },
@@ -61,9 +74,9 @@ export async function sendBuyerMessage(body: string, listingId?: string) {
   });
 }
 
-export async function sendAdminMessage(conversationId: string, body: string) {
+export async function sendAdminMessage(conversationId: string, message: Attachment) {
   await prisma.message.create({
-    data: { conversationId, sender: "admin", body },
+    data: { conversationId, sender: "admin", body: message.body || undefined, imageUrl: message.imageUrl || undefined },
   });
   await prisma.conversation.update({
     where: { id: conversationId },
