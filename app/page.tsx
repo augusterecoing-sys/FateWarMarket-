@@ -99,6 +99,7 @@ export default async function Home() {
                   statLine={item.statLine}
                   tag={item.tag}
                   middleman={item.middleman}
+                  featured={item.featured}
                   images={item.images.map((img) => img.url)}
                   imageLabel={item.imageLabel}
                 />

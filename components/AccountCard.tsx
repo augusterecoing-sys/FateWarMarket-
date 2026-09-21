@@ -12,6 +12,7 @@ type Props = {
   statLine: string;
   tag: string | null;
   middleman: boolean;
+  featured?: boolean;
   imageUrl?: string;
   images?: string[];
   imageLabel?: string | null;
@@ -21,19 +22,21 @@ export default function AccountCard({
   title,
   price,
   level,
-  sellerName,
   accountType,
   verified,
   rating,
   statLine,
   tag,
   middleman,
+  featured,
   imageUrl,
   images,
   imageLabel,
 }: Props) {
   const typeLabel = accountTypeLabel(accountType);
-  const gallery = images && images.length > 0 ? images.slice(0, 6) : imageUrl ? [imageUrl] : [];
+  const gallery = images && images.length > 0 ? images : imageUrl ? [imageUrl] : [];
+  const cover = gallery[0];
+  const extraCount = gallery.length - 1;
 
   return (
     <div
@@ -43,7 +46,8 @@ export default function AccountCard({
         borderRadius: 14,
         overflow: "hidden",
         background: "#1D1812",
-        border: "1px solid rgba(243,233,218,0.10)",
+        border: featured ? "1px solid rgba(201,162,39,0.55)" : "1px solid rgba(243,233,218,0.10)",
+        boxShadow: featured ? "0 0 0 1px rgba(201,162,39,0.18), 0 8px 24px rgba(201,162,39,0.10)" : "none",
       }}
     >
       <div
@@ -52,35 +56,31 @@ export default function AccountCard({
           width: "100%",
           height: 184,
           background: "#181310",
-          display: "grid",
-          gridTemplateColumns: "repeat(3, 1fr)",
-          gridTemplateRows: "repeat(2, 1fr)",
-          gap: 2,
         }}
       >
-        {gallery.length > 0 ? (
-          Array.from({ length: 6 }).map((_, i) => {
-            const src = gallery[i];
-            return src ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img key={i} src={src} alt={`${title} ${i + 1}`} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-            ) : (
-              <div key={i} style={{ width: "100%", height: "100%", background: "linear-gradient(150deg,#241B14 0%,#1D1812 100%)" }} />
-            );
-          })
+        {cover ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={cover} alt={title} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
         ) : (
-          <div style={{ gridColumn: "1 / -1", gridRow: "1 / -1", display: "flex", alignItems: "center", justifyContent: "center", background: "linear-gradient(150deg,#291F16 0%,#1D1812 60%,#181310 100%)" }}>
+          <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", background: "linear-gradient(150deg,#291F16 0%,#1D1812 60%,#181310 100%)" }}>
             <div style={{ fontFamily: "'Manrope',sans-serif", fontSize: 12, fontWeight: 600, color: "#6E655B" }}>
               [ {imageLabel || "No photo yet"} ]
             </div>
           </div>
         )}
-        {tag && (
+
+        {/* Dégradé en bas de l'image pour que les badges restent lisibles sans écraser la photo */}
+        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, rgba(0,0,0,0) 55%, rgba(0,0,0,0.55) 100%)", pointerEvents: "none" }} />
+
+        {featured ? (
           <div
             style={{
               position: "absolute",
               top: 12,
               left: 12,
+              display: "flex",
+              alignItems: "center",
+              gap: 4,
               background: "#C9A227",
               color: "#1A1208",
               fontFamily: "'Manrope',sans-serif",
@@ -90,28 +90,29 @@ export default function AccountCard({
               borderRadius: 5,
             }}
           >
-            {tag}
+            ⭐ Mis en avant
           </div>
+        ) : (
+          tag && (
+            <div
+              style={{
+                position: "absolute",
+                top: 12,
+                left: 12,
+                background: "#C9A227",
+                color: "#1A1208",
+                fontFamily: "'Manrope',sans-serif",
+                fontSize: 11,
+                fontWeight: 700,
+                padding: "4px 9px",
+                borderRadius: 5,
+              }}
+            >
+              {tag}
+            </div>
+          )
         )}
-        {middleman && (
-          <div
-            style={{
-              position: "absolute",
-              bottom: 12,
-              left: 12,
-              background: "rgba(20,17,13,0.82)",
-              color: "#C9A227",
-              fontFamily: "'Manrope',sans-serif",
-              fontSize: 11,
-              fontWeight: 600,
-              padding: "4px 9px",
-              borderRadius: 5,
-              border: "1px solid rgba(201,162,39,0.35)",
-            }}
-          >
-            Middleman available
-          </div>
-        )}
+
         <div
           style={{
             position: "absolute",
@@ -128,7 +129,27 @@ export default function AccountCard({
         >
           Lv. {level}
         </div>
+
+        {extraCount > 0 && (
+          <div
+            style={{
+              position: "absolute",
+              bottom: 10,
+              right: 10,
+              background: "rgba(20,17,13,0.75)",
+              color: "#F3E9DA",
+              fontFamily: "'Manrope',sans-serif",
+              fontSize: 11,
+              fontWeight: 700,
+              padding: "3px 8px",
+              borderRadius: 5,
+            }}
+          >
+            +{extraCount} photo{extraCount > 1 ? "s" : ""}
+          </div>
+        )}
       </div>
+
       <div style={{ padding: "16px 18px 18px", display: "flex", flexDirection: "column", gap: 12 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 9 }}>
           <div
@@ -160,9 +181,32 @@ export default function AccountCard({
             </div>
           )}
         </div>
+
         <div style={{ fontFamily: "'Manrope',sans-serif", fontSize: 13, color: "#9C9186", lineHeight: 1.5 }}>
           {statLine}
         </div>
+
+        {middleman && (
+          <div
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 5,
+              alignSelf: "flex-start",
+              background: "rgba(201,162,39,0.10)",
+              color: "#C9A227",
+              fontFamily: "'Manrope',sans-serif",
+              fontSize: 11.5,
+              fontWeight: 600,
+              padding: "4px 9px",
+              borderRadius: 5,
+              border: "1px solid rgba(201,162,39,0.3)",
+            }}
+          >
+            Intermédiaire disponible
+          </div>
+        )}
+
         <div
           style={{
             display: "flex",
