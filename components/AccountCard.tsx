@@ -13,6 +13,7 @@ type Props = {
   tag: string | null;
   middleman: boolean;
   imageUrl?: string;
+  images?: string[];
   imageLabel?: string | null;
 };
 
@@ -28,10 +29,12 @@ export default function AccountCard({
   tag,
   middleman,
   imageUrl,
+  images,
   imageLabel,
 }: Props) {
   const initial = sellerName.charAt(0).toUpperCase() || "?";
   const typeLabel = accountTypeLabel(accountType);
+  const gallery = images && images.length > 0 ? images.slice(0, 9) : imageUrl ? [imageUrl] : [];
 
   return (
     <div
@@ -49,18 +52,28 @@ export default function AccountCard({
           position: "relative",
           width: "100%",
           height: 184,
-          background: "linear-gradient(150deg,#291F16 0%,#1D1812 60%,#181310 100%)",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
+          background: "#181310",
+          display: "grid",
+          gridTemplateColumns: "repeat(3, 1fr)",
+          gridTemplateRows: "repeat(3, 1fr)",
+          gap: 2,
         }}
       >
-        {imageUrl ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={imageUrl} alt={title} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+        {gallery.length > 0 ? (
+          Array.from({ length: 9 }).map((_, i) => {
+            const src = gallery[i];
+            return src ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img key={i} src={src} alt={`${title} ${i + 1}`} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+            ) : (
+              <div key={i} style={{ width: "100%", height: "100%", background: "linear-gradient(150deg,#241B14 0%,#1D1812 100%)" }} />
+            );
+          })
         ) : (
-          <div style={{ fontFamily: "'Manrope',sans-serif", fontSize: 12, fontWeight: 600, color: "#6E655B" }}>
-            [ {imageLabel || "No photo yet"} ]
+          <div style={{ gridColumn: "1 / -1", gridRow: "1 / -1", display: "flex", alignItems: "center", justifyContent: "center", background: "linear-gradient(150deg,#291F16 0%,#1D1812 60%,#181310 100%)" }}>
+            <div style={{ fontFamily: "'Manrope',sans-serif", fontSize: 12, fontWeight: 600, color: "#6E655B" }}>
+              [ {imageLabel || "No photo yet"} ]
+            </div>
           </div>
         )}
         {tag && (

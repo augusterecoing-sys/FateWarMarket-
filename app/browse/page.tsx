@@ -64,7 +64,7 @@ export default async function Browse({
   const listings = await prisma.listing.findMany({
     where,
     orderBy: { createdAt: "desc" },
-    include: { images: { orderBy: { sortOrder: "asc" }, take: 1 } },
+    include: { images: { orderBy: { sortOrder: "asc" }, take: 9 } },
   });
 
   const isBandChecked = (key: string) => selectedBands.includes(key);
@@ -189,7 +189,7 @@ export default async function Browse({
                     statLine={item.statLine}
                     tag={item.tag}
                     middleman={item.middleman}
-                    imageUrl={item.images[0]?.url}
+                    images={item.images.map((img) => img.url)}
                     imageLabel={item.imageLabel}
                   />
                 </a>
