@@ -17,6 +17,7 @@ model Listing {
   sellerDiscord String? // mémo interne : pseudo Discord du vendeur, jamais affiché publiquement
   sellerEmail String? // mémo interne : email du vendeur, jamais affiché publiquement
   sellerPhone String? // mémo interne : téléphone du vendeur (avec indicatif), jamais affiché publiquement
+  middlemanRequested Boolean @default(false) // un acheteur a demandé un intermédiaire pour ce compte (à traiter côté admin)
   accountType String? // archers | berserker | cavalry — type de compte confirmé par le vendeur
   verified   Boolean  @default(false)
   rating     Float?

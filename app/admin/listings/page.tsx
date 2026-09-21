@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { deleteListing } from "./actions";
+import { dismissMiddlemanRequest } from "@/app/actions/middleman";
 
 export const dynamic = "force-dynamic";
 
@@ -68,6 +69,14 @@ export default async function AdminListings() {
                     <span style={{ fontSize: 11, fontWeight: 700, color: status.color, background: status.bg, padding: "2px 8px", borderRadius: 5, flexShrink: 0 }}>
                       {status.text}
                     </span>
+                    {item.middlemanRequested && (
+                      <span
+                        title="Un acheteur a demandé un intermédiaire"
+                        style={{ display: "inline-flex", alignItems: "center", gap: 4, fontSize: 11, fontWeight: 700, color: "#8FD19E", background: "rgba(143,209,158,0.14)", padding: "2px 8px", borderRadius: 5, flexShrink: 0 }}
+                      >
+                        ✓ Middleman demandé
+                      </span>
+                    )}
                   </div>
                   <div style={{ fontSize: 13, color: "#9C9186" }}>
                     {item.sellerName} · Lv. {item.level}
@@ -88,6 +97,18 @@ export default async function AdminListings() {
                 </div>
 
                 <div style={{ display: "flex", gap: 8, flexShrink: 0 }}>
+                  {item.middlemanRequested && (
+                    <form action={dismissMiddlemanRequest}>
+                      <input type="hidden" name="listingId" value={item.id} />
+                      <button
+                        type="submit"
+                        title="Marquer comme traité"
+                        style={{ fontSize: 13, fontWeight: 600, padding: "8px 14px", border: "1px solid rgba(143,209,158,0.4)", borderRadius: 7, background: "none", color: "#8FD19E", cursor: "pointer" }}
+                      >
+                        ✓ Traité
+                      </button>
+                    </form>
+                  )}
                   <a
                     href={`/browse/${item.id}`}
                     style={{ fontSize: 13, fontWeight: 600, padding: "8px 14px", border: "1px solid rgba(243,233,218,0.18)", borderRadius: 7, textDecoration: "none", color: "#F3E9DA" }}

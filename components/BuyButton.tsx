@@ -14,7 +14,6 @@ export default function BuyButton({
 }) {
   const [open, setOpen] = useState(false);
   const [sending, setSending] = useState(false);
-  const [error, setError] = useState("");
   const formRef = useRef<HTMLFormElement>(null);
 
   useEffect(() => {
@@ -26,28 +25,11 @@ export default function BuyButton({
     return () => window.removeEventListener("keydown", onKey);
   }, [open]);
 
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
+  async function handleYes() {
     if (!formRef.current) return;
-    setError("");
-
-    const formData = new FormData(formRef.current);
-    const buyerDiscord = String(formData.get("buyerDiscord") ?? "").trim();
-    if (!buyerDiscord) {
-      setError("Please enter your Discord username.");
-      return;
-    }
-
     setSending(true);
-    try {
-      await requestMiddleman(formData);
-    } catch (err) {
-      // redirect() déclenche un signal interne Next.js une fois l'envoi terminé — on ne l'affiche pas comme une erreur.
-      if ((err as Error)?.message === "Please enter your Discord username.") {
-        setError((err as Error).message);
-        setSending(false);
-      }
-    }
+    const formData = new FormData(formRef.current);
+    await requestMiddleman(formData); // redirige vers /contact une fois la demande enregistrée
   }
 
   return (
@@ -95,6 +77,7 @@ export default function BuyButton({
               border: "1px solid rgba(243,233,218,0.12)",
               borderRadius: 14,
               padding: "28px 26px",
+              textAlign: "center",
             }}
           >
             <button
@@ -116,64 +99,41 @@ export default function BuyButton({
               ←
             </button>
 
-            <div style={{ fontFamily: "'Bricolage Grotesque',sans-serif", fontSize: 19, fontWeight: 700, marginBottom: 10, paddingRight: 20 }}>
+            <div style={{ fontFamily: "'Bricolage Grotesque',sans-serif", fontSize: 19, fontWeight: 700, marginBottom: 10 }}>
               Use a Middleman for this trade?
             </div>
-            <p style={{ fontSize: 14, color: "#D8CFC2", lineHeight: 1.65, marginBottom: 18 }}>
+            <p style={{ fontSize: 14, color: "#D8CFC2", lineHeight: 1.65, marginBottom: 22 }}>
               {middlemanAvailable
                 ? "This seller accepts Middleman trades. A Middleman holds the account details until both sides confirm payment, so neither of you sends first."
-                : "A Middleman holds the account details until both sides confirm payment, so neither of you sends first. Ask about it when you reach out."}
+                : "A Middleman holds the account details until both sides confirm payment, so neither of you sends first."}
             </p>
 
-            <form ref={formRef} onSubmit={handleSubmit}>
+            <form ref={formRef}>
               <input type="hidden" name="listingId" value={listingId} />
               <input type="hidden" name="listingTitle" value={listingTitle} />
-
-              <label style={{ display: "block", fontSize: 12.5, fontWeight: 600, color: "#D8CFC2", marginBottom: 6 }}>
-                Your Discord username
-              </label>
-              <input
-                name="buyerDiscord"
-                required
-                placeholder="Ex: pseudo#1234 or @pseudo"
-                style={{
-                  display: "block",
-                  width: "100%",
-                  padding: 11,
-                  marginBottom: 14,
-                  background: "#14110D",
-                  border: "1px solid rgba(243,233,218,0.15)",
-                  borderRadius: 8,
-                  color: "#F3E9DA",
-                  fontSize: 14,
-                  boxSizing: "border-box",
-                }}
-              />
-
-              {error && <p style={{ color: "#E2622B", fontSize: 13, marginBottom: 12 }}>{error}</p>}
-
-              <button
-                type="submit"
-                disabled={sending}
-                style={{
-                  display: "block",
-                  width: "100%",
-                  textAlign: "center",
-                  background: "#E2622B",
-                  color: "#14110D",
-                  fontSize: 14,
-                  fontWeight: 700,
-                  padding: "12px 18px",
-                  borderRadius: 8,
-                  border: "none",
-                  cursor: sending ? "not-allowed" : "pointer",
-                  opacity: sending ? 0.7 : 1,
-                  marginBottom: 10,
-                }}
-              >
-                {sending ? "Sending..." : "Continue to Discord"}
-              </button>
             </form>
+
+            <button
+              onClick={handleYes}
+              disabled={sending}
+              style={{
+                display: "block",
+                width: "100%",
+                textAlign: "center",
+                background: "#E2622B",
+                color: "#14110D",
+                fontSize: 14,
+                fontWeight: 700,
+                padding: "12px 18px",
+                borderRadius: 8,
+                border: "none",
+                cursor: sending ? "not-allowed" : "pointer",
+                opacity: sending ? 0.7 : 1,
+                marginBottom: 10,
+              }}
+            >
+              {sending ? "..." : "Yes, use a Middleman"}
+            </button>
 
             <a
               href="/contact"
