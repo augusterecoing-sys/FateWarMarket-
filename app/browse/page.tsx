@@ -64,7 +64,7 @@ export default async function Browse({
   const listings = await prisma.listing.findMany({
     where,
     orderBy: { createdAt: "desc" },
-    include: { images: { orderBy: { sortOrder: "asc" }, take: 9 } },
+    include: { images: { orderBy: { sortOrder: "asc" }, take: 6 } },
   });
 
   const isBandChecked = (key: string) => selectedBands.includes(key);

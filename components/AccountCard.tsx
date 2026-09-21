@@ -33,7 +33,7 @@ export default function AccountCard({
   imageLabel,
 }: Props) {
   const typeLabel = accountTypeLabel(accountType);
-  const gallery = images && images.length > 0 ? images.slice(0, 9) : imageUrl ? [imageUrl] : [];
+  const gallery = images && images.length > 0 ? images.slice(0, 6) : imageUrl ? [imageUrl] : [];
 
   return (
     <div
@@ -54,12 +54,12 @@ export default function AccountCard({
           background: "#181310",
           display: "grid",
           gridTemplateColumns: "repeat(3, 1fr)",
-          gridTemplateRows: "repeat(3, 1fr)",
+          gridTemplateRows: "repeat(2, 1fr)",
           gap: 2,
         }}
       >
         {gallery.length > 0 ? (
-          Array.from({ length: 9 }).map((_, i) => {
+          Array.from({ length: 6 }).map((_, i) => {
             const src = gallery[i];
             return src ? (
               // eslint-disable-next-line @next/next/no-img-element

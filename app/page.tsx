@@ -10,7 +10,7 @@ export default async function Home() {
     where: { status: "active" },
     orderBy: { createdAt: "desc" },
     take: 3,
-    include: { images: { orderBy: { sortOrder: "asc" }, take: 9 } },
+    include: { images: { orderBy: { sortOrder: "asc" }, take: 6 } },
   });
 
   return (
