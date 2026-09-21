@@ -30,6 +30,33 @@ model Listing {
   troopsInfo String? // texte libre : nombre de troupes, infos complémentaires
   createdAt  DateTime @default(now())
   images     ListingImage[]
+  messages   Message[]
+}
+
+// Une messagerie = un acheteur. Le fil est unique par acheteur (identifié par
+// un token privé stocké dans un cookie httpOnly), pas par annonce : un même
+// acheteur qui discute de plusieurs comptes reste dans le même fil, chaque
+// message pouvant référencer l'annonce concernée (listingId).
+model Conversation {
+  id            String    @id @default(cuid())
+  token         String    @unique // jamais affiché, sert uniquement au cookie navigateur de l'acheteur
+  buyerDiscord  String // pseudo Discord donné par l'acheteur à l'ouverture du fil
+  createdAt     DateTime  @default(now())
+  lastMessageAt DateTime  @default(now())
+  unreadByAdmin Boolean   @default(true) // un nouveau message acheteur est arrivé, pas encore vu en admin
+  unreadByBuyer Boolean   @default(false) // une réponse admin est arrivée, pas encore vue par l'acheteur
+  messages      Message[]
+}
+
+model Message {
+  id             String       @id @default(cuid())
+  conversationId String
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  sender         String // "buyer" | "admin"
+  body           String
+  listingId      String? // annonce concernée par ce message, si applicable
+  listing        Listing?     @relation(fields: [listingId], references: [id], onDelete: SetNull)
+  createdAt      DateTime     @default(now())
 }
 
 model ListingImage {

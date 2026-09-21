@@ -12,6 +12,7 @@ export default function Sell() {
           <a href="/browse" style={{ fontSize: 14, fontWeight: 600, color: "#F3E9DA", textDecoration: "none" }}>Browse Accounts</a>
           <a href="/sell" style={{ fontSize: 14, fontWeight: 700, color: "#E2622B", textDecoration: "none" }}>Sell an Account</a>
           <a href="/middleman" style={{ fontSize: 14, fontWeight: 600, color: "#F3E9DA", textDecoration: "none" }}>Middleman</a>
+        <a href="/messages" style={{ fontSize: 14, fontWeight: 600, color: "#F3E9DA", textDecoration: "none" }}>Messages</a>
         </nav>
       </header>
 

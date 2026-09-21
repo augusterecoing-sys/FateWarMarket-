@@ -21,12 +21,20 @@ export default async function AdminListings() {
       <div style={{ maxWidth: 780, margin: "0 auto", padding: "40px 24px 80px" }}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 6 }}>
           <h1 style={{ fontFamily: "'Bricolage Grotesque',sans-serif", fontSize: 24, fontWeight: 700, margin: 0 }}>Tes annonces</h1>
-          <a
-            href="/admin/new"
-            style={{ background: "#E2622B", color: "#14110D", fontSize: 13.5, fontWeight: 700, padding: "9px 16px", borderRadius: 8, textDecoration: "none" }}
-          >
-            + Ajouter une annonce
-          </a>
+          <div style={{ display: "flex", gap: 10 }}>
+            <a
+              href="/admin/messages"
+              style={{ background: "#1D1812", color: "#F3E9DA", border: "1px solid rgba(243,233,218,0.15)", fontSize: 13.5, fontWeight: 700, padding: "9px 16px", borderRadius: 8, textDecoration: "none" }}
+            >
+              ✉ Messagerie
+            </a>
+            <a
+              href="/admin/new"
+              style={{ background: "#E2622B", color: "#14110D", fontSize: 13.5, fontWeight: 700, padding: "9px 16px", borderRadius: 8, textDecoration: "none" }}
+            >
+              + Ajouter une annonce
+            </a>
+          </div>
         </div>
         <p style={{ fontSize: 13.5, color: "#9C9186", marginBottom: 28 }}>
           {listings.length} annonce{listings.length === 1 ? "" : "s"} au total. Clique "Supprimer" pour retirer une annonce définitivement (les photos associées sont aussi effacées).

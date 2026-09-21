@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 
+// Évite de recréer une connexion Prisma à chaque hot-reload en dev.
 const globalForPrisma = globalThis as unknown as { prisma?: PrismaClient };
 
 export const prisma = globalForPrisma.prisma ?? new PrismaClient();

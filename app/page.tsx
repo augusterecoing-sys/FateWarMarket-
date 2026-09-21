@@ -25,6 +25,7 @@ export default async function Home() {
           <a href="/browse" style={navLink}>Browse Accounts</a>
           <a href="/sell" style={navLink}>Sell an Account</a>
           <a href="/middleman" style={navLink}>Middleman</a>
+        <a href="/messages" style={{ fontSize: 14, fontWeight: 600, color: "#F3E9DA", textDecoration: "none" }}>Messages</a>
         </nav>
       </header>
 
