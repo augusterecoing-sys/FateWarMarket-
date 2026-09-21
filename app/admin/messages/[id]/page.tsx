@@ -8,7 +8,7 @@ export const dynamic = "force-dynamic";
 export default async function AdminConversation({ params }: { params: { id: string } }) {
   const conversation = await prisma.conversation.findUnique({
     where: { id: params.id },
-    include: { messages: { orderBy: { createdAt: "asc" }, include: { listing: { select: { title: true } } } } },
+    include: { messages: { orderBy: { createdAt: "asc" }, include: { listing: { select: { id: true, title: true } } } } },
   });
 
   if (!conversation) return notFound();
@@ -40,7 +40,20 @@ export default async function AdminConversation({ params }: { params: { id: stri
               }}
             >
               {m.listing && (
-                <div style={{ fontSize: 11, opacity: 0.75, marginBottom: 4 }}>À propos de : {m.listing.title}</div>
+                <a
+                  href={`/browse/${m.listing.id}`}
+                  target="_blank"
+                  style={{
+                    display: "inline-block",
+                    fontSize: 11,
+                    opacity: 0.85,
+                    marginBottom: 4,
+                    color: m.sender === "admin" ? "#14110D" : "#E2622B",
+                    textDecoration: "underline",
+                  }}
+                >
+                  À propos de : {m.listing.title} ↗
+                </a>
               )}
               <div style={{ whiteSpace: "pre-wrap" }}>{m.body}</div>
             </div>

@@ -5,7 +5,7 @@ export const dynamic = "force-dynamic";
 export default async function AdminMessages() {
   const conversations = await prisma.conversation.findMany({
     orderBy: { lastMessageAt: "desc" },
-    include: { messages: { orderBy: { createdAt: "desc" }, take: 1 } },
+    include: { messages: { orderBy: { createdAt: "desc" }, take: 1, include: { listing: { select: { id: true, title: true } } } } },
   });
 
   return (
@@ -54,10 +54,17 @@ export default async function AdminMessages() {
                     )}
                   </div>
                   {last && (
-                    <div style={{ fontSize: 13, color: "#9C9186", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", maxWidth: 480 }}>
-                      {last.sender === "admin" ? "Toi : " : ""}
-                      {last.body}
-                    </div>
+                    <>
+                      {last.listing && (
+                        <div style={{ fontSize: 11.5, color: "#E2622B", fontWeight: 700, marginBottom: 2 }}>
+                          {last.listing.title}
+                        </div>
+                      )}
+                      <div style={{ fontSize: 13, color: "#9C9186", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", maxWidth: 480 }}>
+                        {last.sender === "admin" ? "Toi : " : ""}
+                        {last.body}
+                      </div>
+                    </>
                   )}
                 </div>
                 <div style={{ fontSize: 12, color: "#6E665C", flexShrink: 0 }}>

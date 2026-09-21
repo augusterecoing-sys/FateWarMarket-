@@ -16,8 +16,14 @@ export default async function MessagesPage({
 }) {
   const conversation = await getConversationForBuyer();
 
-  const listing = searchParams.listingId
-    ? await prisma.listing.findUnique({ where: { id: searchParams.listingId }, select: { id: true, title: true } })
+  const lastMessageListingId = conversation?.messages.length
+    ? [...conversation.messages].reverse().find((m) => m.listingId)?.listingId
+    : undefined;
+
+  const effectiveListingId = searchParams.listingId || lastMessageListingId || undefined;
+
+  const listing = effectiveListingId
+    ? await prisma.listing.findUnique({ where: { id: effectiveListingId }, select: { id: true, title: true } })
     : null;
 
   return (
