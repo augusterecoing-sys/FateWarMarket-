@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import ImageGallery from "@/components/ImageGallery";
-import BuyButton from "@/components/BuyButton";
+import ContactSellerButton from "@/components/ContactSellerButton";
 import { accountTypeLabel } from "@/lib/accountTypes";
 
 export const dynamic = "force-dynamic";
@@ -85,25 +85,7 @@ export default async function AccountDetail({
           </div>
           <div style={{ textAlign: "right" }}>
             <div style={{ fontFamily: "'Bricolage Grotesque',sans-serif", fontSize: 32, fontWeight: 700, color: "#F0793B" }}>${listing.price}</div>
-            <BuyButton listingId={listing.id} listingTitle={listing.title} middlemanAvailable={listing.middleman} />
-            <a
-              href={`/messages?listingId=${listing.id}`}
-              style={{
-                display: "inline-block",
-                marginTop: 10,
-                marginLeft: 10,
-                background: "none",
-                color: "#F3E9DA",
-                fontSize: 13.5,
-                fontWeight: 700,
-                padding: "10px 18px",
-                borderRadius: 8,
-                border: "1px solid rgba(243,233,218,0.2)",
-                textDecoration: "none",
-              }}
-            >
-              Message the seller
-            </a>
+            <ContactSellerButton listingId={listing.id} listingTitle={listing.title} middlemanAvailable={listing.middleman} />
             {listing.middleman && (
               <div style={{ fontSize: 12.5, color: "#C9A227", marginTop: 8 }}>Middleman available for this account</div>
             )}
