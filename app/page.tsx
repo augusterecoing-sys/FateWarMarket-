@@ -16,12 +16,12 @@ export default async function Home() {
   return (
     <main>
       {/* Header */}
-      <header style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "22px 5%", borderBottom: "1px solid rgba(243,233,218,0.08)" }}>
+      <header style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "22px 5%", borderBottom: "1px solid rgba(243,233,218,0.08)", flexWrap: "wrap", rowGap: 12 }}>
         <a href="/" style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none", color: "inherit" }}>
           <div style={{ width: 30, height: 30, borderRadius: 7, background: "#E2622B", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'Bricolage Grotesque',sans-serif", fontWeight: 800, fontSize: 15, color: "#14110D" }}>F</div>
           <div style={{ fontFamily: "'Bricolage Grotesque',sans-serif", fontWeight: 700, fontSize: 17 }}>Fate War Market</div>
         </a>
-        <nav style={{ display: "flex", gap: 32 }}>
+        <nav style={{ display: "flex", gap: 22, flexWrap: "wrap" }}>
           <a href="/browse" style={navLink}>Browse Accounts</a>
           <a href="/sell" style={navLink}>Sell an Account</a>
           <a href="/middleman" style={navLink}>Middleman</a>
@@ -29,9 +29,9 @@ export default async function Home() {
       </header>
 
       {/* Hero */}
-      <section style={{ padding: "80px 5%", maxWidth: 700, margin: "0 auto", textAlign: "center", display: "flex", flexDirection: "column", gap: 22, alignItems: "center" }}>
+      <section style={{ padding: "clamp(48px, 9vw, 80px) 5%", maxWidth: 700, margin: "0 auto", textAlign: "center", display: "flex", flexDirection: "column", gap: 22, alignItems: "center" }}>
         <div style={{ color: "#C9A227", fontSize: 13, fontWeight: 600 }}>Fate War account marketplace</div>
-        <h1 style={{ fontFamily: "'Bricolage Grotesque',sans-serif", fontSize: 40, fontWeight: 700, lineHeight: 1.15, margin: 0 }}>
+        <h1 style={{ fontFamily: "'Bricolage Grotesque',sans-serif", fontSize: "clamp(27px, 6.5vw, 40px)", fontWeight: 700, lineHeight: 1.15, margin: 0 }}>
           Buy and sell Fate War accounts with proof, not promises.
         </h1>
         <p style={{ fontSize: 16, lineHeight: 1.6, color: "#9C9186", margin: 0 }}>
@@ -55,7 +55,7 @@ export default async function Home() {
       {/* Browse by price */}
       <section style={{ padding: "0 5% 60px", maxWidth: 1200, margin: "0 auto" }}>
         <h2 style={{ fontSize: 20, fontWeight: 700, margin: "0 0 18px" }}>Browse by budget</h2>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(5, minmax(0, 1fr))", gap: 14 }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(120px, 1fr))", gap: 14 }}>
           <a href="/browse?band=under100" style={{ background: "#1D1812", border: "1px solid rgba(243,233,218,0.09)", borderRadius: 10, padding: "18px 14px", textAlign: "center", fontSize: 14, fontWeight: 600, color: "#F3E9DA", textDecoration: "none" }}>Under $100</a>
           <a href="/browse?band=100-250" style={{ background: "#1D1812", border: "1px solid rgba(243,233,218,0.09)", borderRadius: 10, padding: "18px 14px", textAlign: "center", fontSize: 14, fontWeight: 600, color: "#F3E9DA", textDecoration: "none" }}>$100 – $250</a>
           <a href="/browse?band=250-500" style={{ background: "#1D1812", border: "1px solid rgba(243,233,218,0.09)", borderRadius: 10, padding: "18px 14px", textAlign: "center", fontSize: 14, fontWeight: 600, color: "#F3E9DA", textDecoration: "none" }}>$250 – $500</a>
@@ -67,7 +67,7 @@ export default async function Home() {
       {/* Browse by account type */}
       <section style={{ padding: "0 5% 60px", maxWidth: 1200, margin: "0 auto" }}>
         <h2 style={{ fontSize: 20, fontWeight: 700, margin: "0 0 18px" }}>Browse by account type</h2>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: 14 }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(110px, 1fr))", gap: 14 }}>
           <a href="/browse?type=cavalry" style={{ background: "#1D1812", border: "1px solid rgba(243,233,218,0.09)", borderRadius: 10, padding: "18px 14px", textAlign: "center", fontSize: 14, fontWeight: 600, color: "#F3E9DA", textDecoration: "none" }}>Cavalry</a>
           <a href="/browse?type=berserker" style={{ background: "#1D1812", border: "1px solid rgba(243,233,218,0.09)", borderRadius: 10, padding: "18px 14px", textAlign: "center", fontSize: 14, fontWeight: 600, color: "#F3E9DA", textDecoration: "none" }}>Berserker</a>
           <a href="/browse?type=archers" style={{ background: "#1D1812", border: "1px solid rgba(243,233,218,0.09)", borderRadius: 10, padding: "18px 14px", textAlign: "center", fontSize: 14, fontWeight: 600, color: "#F3E9DA", textDecoration: "none" }}>Archers</a>
