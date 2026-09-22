@@ -127,6 +127,9 @@ export default function NewListingForm() {
       <label style={{ display: "flex", gap: 8, marginBottom: 20 }}>
         <input type="checkbox" name="featured" /> Mettre en avant (Featured)
       </label>
+      <label style={{ display: "flex", gap: 8, marginBottom: 20, color: "#D9372B", fontWeight: 700 }}>
+        <input type="checkbox" name="sold" /> Marquer SOLD (liseré rouge sur le compte)
+      </label>
 
       {error && <p style={{ color: "#c0392b", fontSize: 13, marginBottom: 14 }}>{error}</p>}
 

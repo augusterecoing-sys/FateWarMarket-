@@ -16,6 +16,7 @@ type Props = {
   imageUrl?: string;
   images?: string[];
   imageLabel?: string | null;
+  sold?: boolean;
 };
 
 export default function AccountCard({
@@ -32,6 +33,7 @@ export default function AccountCard({
   imageUrl,
   images,
   imageLabel,
+  sold,
 }: Props) {
   const typeLabel = accountTypeLabel(accountType);
   const gallery = images && images.length > 0 ? images : imageUrl ? [imageUrl] : [];
@@ -46,8 +48,16 @@ export default function AccountCard({
         borderRadius: 14,
         overflow: "hidden",
         background: "#1D1812",
-        border: featured ? "1px solid rgba(201,162,39,0.55)" : "1px solid rgba(243,233,218,0.10)",
-        boxShadow: featured ? "0 0 0 1px rgba(201,162,39,0.18), 0 8px 24px rgba(201,162,39,0.10)" : "none",
+        border: sold
+          ? "2px solid #D9372B"
+          : featured
+          ? "1px solid rgba(201,162,39,0.55)"
+          : "1px solid rgba(243,233,218,0.10)",
+        boxShadow: sold
+          ? "0 0 0 1px rgba(217,55,43,0.25), 0 8px 24px rgba(217,55,43,0.15)"
+          : featured
+          ? "0 0 0 1px rgba(201,162,39,0.18), 0 8px 24px rgba(201,162,39,0.10)"
+          : "none",
       }}
     >
       <div
@@ -56,11 +66,12 @@ export default function AccountCard({
           width: "100%",
           height: 184,
           background: "#181310",
+          overflow: "hidden",
         }}
       >
         {cover ? (
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={cover} alt={title} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+          <img src={cover} alt={title} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", filter: sold ? "grayscale(0.6) brightness(0.6)" : "none" }} />
         ) : (
           <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", background: "linear-gradient(150deg,#291F16 0%,#1D1812 60%,#181310 100%)" }}>
             <div style={{ fontFamily: "'Manrope',sans-serif", fontSize: 12, fontWeight: 600, color: "#6E655B" }}>
@@ -71,6 +82,35 @@ export default function AccountCard({
 
         {/* Dégradé en bas de l'image pour que les badges restent lisibles sans écraser la photo */}
         <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, rgba(0,0,0,0) 55%, rgba(0,0,0,0.55) 100%)", pointerEvents: "none" }} />
+
+
+        {/* Liseré rouge SOLD (activé uniquement depuis l'admin) */}
+        {sold && (
+          <div
+            style={{
+              position: "absolute",
+              top: "50%",
+              left: "-10%",
+              width: "120%",
+              transform: "translateY(-50%) rotate(-8deg)",
+              background: "#D9372B",
+              color: "#FFFFFF",
+              textAlign: "center",
+              fontFamily: "'Bricolage Grotesque',sans-serif",
+              fontSize: 26,
+              fontWeight: 800,
+              letterSpacing: 6,
+              padding: "6px 0",
+              borderTop: "2px solid rgba(255,255,255,0.35)",
+              borderBottom: "2px solid rgba(255,255,255,0.35)",
+              boxShadow: "0 4px 16px rgba(0,0,0,0.45)",
+              zIndex: 2,
+              pointerEvents: "none",
+            }}
+          >
+            SOLD
+          </div>
+        )}
 
         {featured ? (
           <div
@@ -216,11 +256,11 @@ export default function AccountCard({
             borderTop: "1px solid rgba(243,233,218,0.08)",
           }}
         >
-          <div style={{ fontFamily: "'Bricolage Grotesque',sans-serif", fontSize: 22, fontWeight: 700, color: "#F0793B" }}>
+          <div style={{ fontFamily: "'Bricolage Grotesque',sans-serif", fontSize: 22, fontWeight: 700, color: sold ? "#6E655B" : "#F0793B", textDecoration: sold ? "line-through" : "none" }}>
             ${price}
           </div>
-          <div style={{ fontFamily: "'Manrope',sans-serif", fontSize: 13, fontWeight: 600, color: "#F3E9DA" }}>
-            View account →
+          <div style={{ fontFamily: "'Manrope',sans-serif", fontSize: 13, fontWeight: 700, color: sold ? "#D9372B" : "#F3E9DA" }}>
+            {sold ? "Sold" : "View account →"}
           </div>
         </div>
       </div>

@@ -1,12 +1,12 @@
 import { prisma } from "@/lib/prisma";
-import { deleteListing } from "./actions";
+import { deleteListing, toggleSold } from "./actions";
 import { dismissMiddlemanRequest } from "@/app/actions/middleman";
 
 export const dynamic = "force-dynamic";
 
 const statusLabel: Record<string, { text: string; color: string; bg: string }> = {
   active: { text: "En ligne", color: "#8FD19E", bg: "rgba(143,209,158,0.12)" },
-  sold: { text: "Vendu", color: "#C9A227", bg: "rgba(201,162,39,0.12)" },
+  sold: { text: "SOLD", color: "#FF6B5E", bg: "rgba(217,55,43,0.18)" },
   removed: { text: "Retiré", color: "#9C9186", bg: "rgba(156,145,134,0.12)" },
 };
 
@@ -57,7 +57,7 @@ export default async function AdminListings() {
                   alignItems: "center",
                   gap: 16,
                   background: "#1D1812",
-                  border: "1px solid rgba(243,233,218,0.09)",
+                  border: item.status === "sold" ? "2px solid #D9372B" : "1px solid rgba(243,233,218,0.09)",
                   borderRadius: 12,
                   padding: 14,
                 }}
@@ -129,6 +129,24 @@ export default async function AdminListings() {
                   >
                     Modifier
                   </a>
+                  <form action={toggleSold}>
+                    <input type="hidden" name="id" value={item.id} />
+                    <button
+                      type="submit"
+                      style={{
+                        fontSize: 13,
+                        fontWeight: 700,
+                        padding: "8px 14px",
+                        borderRadius: 7,
+                        cursor: "pointer",
+                        border: "1px solid #D9372B",
+                        background: item.status === "sold" ? "none" : "#D9372B",
+                        color: item.status === "sold" ? "#D9372B" : "#FFFFFF",
+                      }}
+                    >
+                      {item.status === "sold" ? "Retirer SOLD" : "SOLD"}
+                    </button>
+                  </form>
                   <form action={deleteListing}>
                     <input type="hidden" name="id" value={item.id} />
                     <button

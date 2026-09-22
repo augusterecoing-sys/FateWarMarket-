@@ -30,3 +30,22 @@ export async function deleteListing(formData: FormData) {
   revalidatePath("/browse");
   revalidatePath("/");
 }
+
+// Bascule SOLD <-> en ligne depuis /admin/listings (admin uniquement, route protégée par le middleware).
+export async function toggleSold(formData: FormData) {
+  const id = String(formData.get("id") ?? "");
+  if (!id) return;
+
+  const listing = await prisma.listing.findUnique({ where: { id }, select: { status: true } });
+  if (!listing) return;
+
+  await prisma.listing.update({
+    where: { id },
+    data: { status: listing.status === "sold" ? "active" : "sold" },
+  });
+
+  revalidatePath("/admin/listings");
+  revalidatePath("/browse");
+  revalidatePath(`/browse/${id}`);
+  revalidatePath("/");
+}

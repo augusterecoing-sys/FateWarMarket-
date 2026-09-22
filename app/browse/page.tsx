@@ -57,13 +57,13 @@ export default async function Browse({
   if (middlemanOnly) andConditions.push({ middleman: true });
 
   const where: Prisma.ListingWhereInput = {
-    status: "active",
+    status: { in: ["active", "sold"] },
     ...(andConditions.length > 0 ? { AND: andConditions } : {}),
   };
 
   const listings = await prisma.listing.findMany({
     where,
-    orderBy: [{ featured: "desc" }, { createdAt: "desc" }],
+    orderBy: [{ status: "asc" }, { featured: "desc" }, { createdAt: "desc" }], // "active" avant "sold"
     include: { images: { orderBy: { sortOrder: "asc" }, take: 6 } },
   });
 
@@ -192,6 +192,7 @@ export default async function Browse({
                     featured={item.featured}
                     images={item.images.map((img) => img.url)}
                     imageLabel={item.imageLabel}
+                  sold={item.status === "sold"}
                   />
                 </a>
               ))}

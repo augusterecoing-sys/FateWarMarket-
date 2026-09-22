@@ -7,8 +7,8 @@ const navLink: React.CSSProperties = { fontSize: 14, fontWeight: 600, color: "#F
 
 export default async function Home() {
   const featured = await prisma.listing.findMany({
-    where: { status: "active" },
-    orderBy: [{ featured: "desc" }, { createdAt: "desc" }],
+    where: { status: { in: ["active", "sold"] } },
+    orderBy: [{ status: "asc" }, { featured: "desc" }, { createdAt: "desc" }], // "active" avant "sold"
     take: 3,
     include: { images: { orderBy: { sortOrder: "asc" }, take: 6 } },
   });
@@ -102,6 +102,7 @@ export default async function Home() {
                   featured={item.featured}
                   images={item.images.map((img) => img.url)}
                   imageLabel={item.imageLabel}
+                  sold={item.status === "sold"}
                 />
               </a>
             ))}

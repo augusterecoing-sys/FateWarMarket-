@@ -19,6 +19,7 @@ export async function createListing(formData: FormData) {
   const middleman = formData.get("middleman") === "on";
   const featured = formData.get("featured") === "on";
   const troopsInfo = String(formData.get("troopsInfo") ?? "");
+  const sold = formData.get("sold") === "on";
 
   // Images déjà uploadées côté client (voir NewListingForm.tsx)
   const uploadedImagesRaw = String(formData.get("uploadedImages") ?? "[]");
@@ -58,6 +59,7 @@ export async function createListing(formData: FormData) {
       middleman,
       featured,
       troopsInfo,
+      status: sold ? "sold" : "active",
       images: { create: imagesToCreate },
     },
   });

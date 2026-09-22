@@ -38,6 +38,7 @@ export default async function AccountDetail({
     : "overview";
 
   const imagesForTab = listing.images.filter((img) => img.category === activeTab);
+  const isSold = listing.status === "sold";
 
   return (
     <main>
@@ -55,6 +56,24 @@ export default async function AccountDetail({
       </header>
 
       <div style={{ maxWidth: 1000, margin: "0 auto", padding: "40px 5% 80px" }}>
+        {isSold && (
+          <div
+            style={{
+              background: "#D9372B",
+              color: "#FFFFFF",
+              textAlign: "center",
+              fontFamily: "'Bricolage Grotesque',sans-serif",
+              fontSize: 22,
+              fontWeight: 800,
+              letterSpacing: 5,
+              padding: "12px 0",
+              borderRadius: 10,
+              marginBottom: 28,
+            }}
+          >
+            SOLD
+          </div>
+        )}
         {/* Header info */}
         <div style={{ display: "flex", flexWrap: "wrap", gap: 24, alignItems: "flex-start", justifyContent: "space-between", marginBottom: 28 }}>
           <div>
@@ -87,7 +106,10 @@ export default async function AccountDetail({
             </div>
           </div>
           <div style={{ textAlign: "right" }}>
-            <div style={{ fontFamily: "'Bricolage Grotesque',sans-serif", fontSize: 32, fontWeight: 700, color: "#F0793B" }}>${listing.price}</div>
+            <div style={{ fontFamily: "'Bricolage Grotesque',sans-serif", fontSize: 32, fontWeight: 700, color: isSold ? "#6E655B" : "#F0793B", textDecoration: isSold ? "line-through" : "none" }}>${listing.price}</div>
+            {isSold ? (
+              <div style={{ fontSize: 14, fontWeight: 700, color: "#D9372B", marginTop: 6 }}>This account has been sold.</div>
+            ) : (
             <ContactSellerButton
               listingId={listing.id}
               listingTitle={listing.title}
@@ -95,7 +117,8 @@ export default async function AccountDetail({
               middlemanAvailable={listing.middleman}
               existingBuyerDiscord={existingConversation?.buyerDiscord}
             />
-            {listing.middleman && (
+            )}
+            {!isSold && listing.middleman && (
               <div style={{ fontSize: 12.5, color: "#C9A227", marginTop: 8 }}>Middleman available for this account</div>
             )}
           </div>
