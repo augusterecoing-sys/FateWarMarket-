@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import AccountCard from "@/components/AccountCard";
+import RecentlySold from "@/components/RecentlySold";
 import { ACCOUNT_TYPES } from "@/lib/accountTypes";
 import type { Prisma } from "@prisma/client";
 
@@ -57,13 +58,13 @@ export default async function Browse({
   if (middlemanOnly) andConditions.push({ middleman: true });
 
   const where: Prisma.ListingWhereInput = {
-    status: { in: ["active", "sold"] },
+    status: "active",
     ...(andConditions.length > 0 ? { AND: andConditions } : {}),
   };
 
   const listings = await prisma.listing.findMany({
     where,
-    orderBy: [{ status: "asc" }, { featured: "desc" }, { createdAt: "desc" }], // "active" avant "sold"
+    orderBy: [{ featured: "desc" }, { createdAt: "desc" }],
     include: { images: { orderBy: { sortOrder: "asc" }, take: 6 } },
   });
 
@@ -171,6 +172,8 @@ export default async function Browse({
         </form>
 
         <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 28 }}>
+          {/* Vitrine SOLD : seulement sans filtre actif, pour ne pas polluer une recherche */}
+          {andConditions.length === 0 && <RecentlySold take={3} minCardWidth={240} />}
           {listings.length === 0 ? (
             <p style={{ color: "#9C9186" }}>No accounts match these filters.</p>
           ) : (
@@ -192,7 +195,6 @@ export default async function Browse({
                     featured={item.featured}
                     images={item.images.map((img) => img.url)}
                     imageLabel={item.imageLabel}
-                  sold={item.status === "sold"}
                   />
                 </a>
               ))}
