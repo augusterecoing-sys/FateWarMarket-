@@ -20,6 +20,12 @@ export async function createListing(formData: FormData) {
   const featured = formData.get("featured") === "on";
   const troopsInfo = String(formData.get("troopsInfo") ?? "");
   const sold = formData.get("sold") === "on";
+  const accountOfWeek = formData.get("accountOfWeek") === "on";
+
+  // Un seul "compte de la semaine" à la fois : on retire l'onglet des autres
+  if (accountOfWeek) {
+    await prisma.listing.updateMany({ where: { accountOfWeek: true }, data: { accountOfWeek: false } });
+  }
 
   // Images déjà uploadées côté client (voir NewListingForm.tsx)
   const uploadedImagesRaw = String(formData.get("uploadedImages") ?? "[]");
@@ -58,6 +64,7 @@ export async function createListing(formData: FormData) {
       tag,
       middleman,
       featured,
+      accountOfWeek,
       troopsInfo,
       status: sold ? "sold" : "active",
       images: { create: imagesToCreate },

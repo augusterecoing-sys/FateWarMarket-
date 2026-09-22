@@ -34,6 +34,7 @@ type Listing = {
   tag: string | null;
   middleman: boolean;
   featured: boolean;
+  accountOfWeek: boolean;
   troopsInfo: string | null;
   status: string;
 };
@@ -155,6 +156,9 @@ export default function EditListingForm({ listing }: { listing: Listing }) {
       </label>
       <label style={{ display: "flex", gap: 8, marginBottom: 20 }}>
         <input type="checkbox" name="featured" defaultChecked={listing.featured} /> Mettre en avant (Featured)
+      </label>
+      <label style={{ display: "flex", gap: 8, marginBottom: 20, color: "#E2622B", fontWeight: 700 }}>
+        <input type="checkbox" name="accountOfWeek" defaultChecked={listing.accountOfWeek} /> 🔥 Compte de la semaine (remplace l&apos;actuel)
       </label>
 
       {error && <p style={{ color: "#c0392b", fontSize: 13, marginBottom: 14 }}>{error}</p>}

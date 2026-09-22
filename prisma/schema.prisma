@@ -26,6 +26,7 @@ model Listing {
   tag        String? // ex: "Featured", ou vide
   middleman  Boolean  @default(true)
   featured   Boolean  @default(false)
+  accountOfWeek Boolean @default(false) // onglet "Account of the week" — un seul compte à la fois
   status     String   @default("active") // active | sold | removed
   troopsInfo String? // texte libre : nombre de troupes, infos complémentaires
   createdAt  DateTime @default(now())

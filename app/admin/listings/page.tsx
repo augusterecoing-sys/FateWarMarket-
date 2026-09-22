@@ -77,6 +77,11 @@ export default async function AdminListings() {
                     <span style={{ fontSize: 11, fontWeight: 700, color: status.color, background: status.bg, padding: "2px 8px", borderRadius: 5, flexShrink: 0 }}>
                       {status.text}
                     </span>
+                    {item.accountOfWeek && (
+                      <span style={{ fontSize: 11, fontWeight: 700, color: "#14110D", background: "#F0793B", padding: "2px 8px", borderRadius: 5, flexShrink: 0 }}>
+                        🔥 Semaine
+                      </span>
+                    )}
                     {item.middlemanRequested && (
                       <span
                         title="Un acheteur a demandé un intermédiaire"

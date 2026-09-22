@@ -4,6 +4,56 @@
 
 html {
   -webkit-text-size-adjust: 100%;
+  background: #0A0806; /* fond noir */
+}
+
+/* Reflets orange qui bougent lentement dans le fond (chaleur) */
+body::before,
+body::after {
+  content: "";
+  position: fixed;
+  z-index: -1;
+  pointer-events: none;
+  border-radius: 50%;
+  filter: blur(90px);
+  will-change: transform;
+}
+
+body::before {
+  width: 60vmax;
+  height: 60vmax;
+  top: -20vmax;
+  left: -15vmax;
+  background: radial-gradient(circle, rgba(226, 98, 43, 0.16) 0%, rgba(226, 98, 43, 0) 65%);
+  animation: glow-drift-a 28s ease-in-out infinite alternate;
+}
+
+body::after {
+  width: 55vmax;
+  height: 55vmax;
+  bottom: -20vmax;
+  right: -15vmax;
+  background: radial-gradient(circle, rgba(240, 121, 59, 0.12) 0%, rgba(201, 162, 39, 0.05) 40%, rgba(240, 121, 59, 0) 65%);
+  animation: glow-drift-b 34s ease-in-out infinite alternate;
+}
+
+@keyframes glow-drift-a {
+  0% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(25vw, 20vh) scale(1.15); }
+  100% { transform: translate(45vw, 5vh) scale(0.95); }
+}
+
+@keyframes glow-drift-b {
+  0% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(-30vw, -25vh) scale(1.1); }
+  100% { transform: translate(-10vw, -45vh) scale(0.9); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body::before,
+  body::after {
+    animation: none;
+  }
 }
 
 img {

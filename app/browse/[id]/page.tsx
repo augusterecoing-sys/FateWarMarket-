@@ -77,6 +77,11 @@ export default async function AccountDetail({
         {/* Header info */}
         <div style={{ display: "flex", flexWrap: "wrap", gap: 24, alignItems: "flex-start", justifyContent: "space-between", marginBottom: 28 }}>
           <div>
+            {listing.accountOfWeek && !isSold && (
+              <div style={{ display: "inline-block", background: "linear-gradient(135deg,#F0793B 0%,#E2622B 100%)", color: "#14110D", fontSize: 11, fontWeight: 800, padding: "4px 10px", borderRadius: 5, marginBottom: 10, marginRight: 8 }}>
+                🔥 Account of the week
+              </div>
+            )}
             {listing.tag && (
               <div style={{ display: "inline-block", background: "#C9A227", color: "#1A1208", fontSize: 11, fontWeight: 700, padding: "3px 9px", borderRadius: 5, marginBottom: 10 }}>
                 {listing.tag}

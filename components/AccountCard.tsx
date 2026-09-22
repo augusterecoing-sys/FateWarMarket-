@@ -17,6 +17,7 @@ type Props = {
   images?: string[];
   imageLabel?: string | null;
   sold?: boolean;
+  accountOfWeek?: boolean;
 };
 
 export default function AccountCard({
@@ -34,7 +35,9 @@ export default function AccountCard({
   images,
   imageLabel,
   sold,
+  accountOfWeek,
 }: Props) {
+  const isWeek = !!accountOfWeek && !sold;
   const typeLabel = accountTypeLabel(accountType);
   const gallery = images && images.length > 0 ? images : imageUrl ? [imageUrl] : [];
   const cover = gallery[0];
@@ -50,11 +53,15 @@ export default function AccountCard({
         background: "#1D1812",
         border: sold
           ? "2px solid #D9372B"
+          : isWeek
+          ? "2px solid #F0793B"
           : featured
           ? "1px solid rgba(201,162,39,0.55)"
           : "1px solid rgba(243,233,218,0.10)",
         boxShadow: sold
           ? "0 0 0 1px rgba(217,55,43,0.25), 0 8px 24px rgba(217,55,43,0.15)"
+          : isWeek
+          ? "0 0 0 1px rgba(240,121,59,0.25), 0 10px 30px rgba(240,121,59,0.22)"
           : featured
           ? "0 0 0 1px rgba(201,162,39,0.18), 0 8px 24px rgba(201,162,39,0.10)"
           : "none",
@@ -112,7 +119,26 @@ export default function AccountCard({
           </div>
         )}
 
-        {featured ? (
+        {isWeek ? (
+          <div
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 14,
+              background: "linear-gradient(135deg,#F0793B 0%,#E2622B 100%)",
+              color: "#14110D",
+              fontFamily: "'Manrope',sans-serif",
+              fontSize: 11,
+              fontWeight: 800,
+              padding: "5px 10px 6px",
+              borderRadius: "0 0 7px 7px",
+              boxShadow: "0 4px 12px rgba(226,98,43,0.4)",
+              zIndex: 1,
+            }}
+          >
+            🔥 Account of the week
+          </div>
+        ) : featured ? (
           <div
             style={{
               position: "absolute",

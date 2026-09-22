@@ -16,7 +16,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=Manrope:wght@400;500;600;700&display=swap"
         />
       </head>
-      <body style={{ margin: 0, background: "#14110D", color: "#F3E9DA", fontFamily: "'Manrope',sans-serif" }}>
+      <body style={{ margin: 0, background: "transparent", color: "#F3E9DA", fontFamily: "'Manrope',sans-serif" }}>
         {children}
         <Analytics />
       </body>

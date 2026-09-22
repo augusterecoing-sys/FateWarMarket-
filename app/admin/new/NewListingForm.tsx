@@ -127,6 +127,9 @@ export default function NewListingForm() {
       <label style={{ display: "flex", gap: 8, marginBottom: 20 }}>
         <input type="checkbox" name="featured" /> Mettre en avant (Featured)
       </label>
+      <label style={{ display: "flex", gap: 8, marginBottom: 20, color: "#E2622B", fontWeight: 700 }}>
+        <input type="checkbox" name="accountOfWeek" /> 🔥 Compte de la semaine (remplace l&apos;actuel)
+      </label>
       <label style={{ display: "flex", gap: 8, marginBottom: 20, color: "#D9372B", fontWeight: 700 }}>
         <input type="checkbox" name="sold" /> Marquer SOLD (liseré rouge sur le compte)
       </label>

@@ -23,6 +23,12 @@ export async function updateListing(formData: FormData) {
   const featured = formData.get("featured") === "on";
   const troopsInfo = String(formData.get("troopsInfo") ?? "");
   const status = String(formData.get("status") ?? "active");
+  const accountOfWeek = formData.get("accountOfWeek") === "on";
+
+  // Un seul "compte de la semaine" à la fois
+  if (accountOfWeek) {
+    await prisma.listing.updateMany({ where: { accountOfWeek: true, NOT: { id } }, data: { accountOfWeek: false } });
+  }
 
   const existing = await prisma.listing.findUnique({
     where: { id },
@@ -68,6 +74,7 @@ export async function updateListing(formData: FormData) {
       tag,
       middleman,
       featured,
+      accountOfWeek,
       troopsInfo,
       status,
       images: newImages.length > 0 ? { create: newImages } : undefined,
