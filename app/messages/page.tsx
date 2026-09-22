@@ -3,6 +3,7 @@ import { getConversationForBuyer } from "@/lib/messaging";
 import StartConversationForm from "./StartConversationForm";
 import ReplyForm from "./ReplyForm";
 import MarkAsRead from "@/components/MarkAsRead";
+import OfferCard from "@/components/OfferCard";
 import { markConversationReadByBuyer } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -88,6 +89,15 @@ export default async function MessagesPage({
                         style={{ display: "block", maxWidth: "100%", maxHeight: 420, width: "auto", height: "auto", borderRadius: 8, objectFit: "contain" }}
                       />
                     </a>
+                  )}
+                  {m.offerAmount != null && (
+                    <OfferCard
+                      amount={m.offerAmount}
+                      status={m.offerStatus}
+                      messageId={m.id}
+                      conversationId={conversation.id}
+                      onBubble={m.sender === "buyer" ? "#14110D" : "#F3E9DA"}
+                    />
                   )}
                   {m.body && <div style={{ whiteSpace: "pre-wrap" }}>{m.body}</div>}
                 </div>

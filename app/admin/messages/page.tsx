@@ -60,9 +60,9 @@ export default async function AdminMessages() {
                           {last.listing.title}
                         </div>
                       )}
-                      <div style={{ fontSize: 13, color: "#9C9186", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", maxWidth: 480 }}>
+                      <div style={{ fontSize: 13, color: last.offerAmount != null ? "#C9A227" : "#9C9186", fontWeight: last.offerAmount != null ? 700 : 400, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", maxWidth: 480 }}>
                         {last.sender === "admin" ? "Toi : " : ""}
-                        {last.body}
+                        {last.offerAmount != null ? `💰 Offre : $${last.offerAmount}` : last.imageUrl && !last.body ? "📷 Photo" : last.body}
                       </div>
                     </>
                   )}

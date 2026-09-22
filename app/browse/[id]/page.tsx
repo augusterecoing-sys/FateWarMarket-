@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import ImageGallery from "@/components/ImageGallery";
 import ContactSellerButton from "@/components/ContactSellerButton";
 import { accountTypeLabel } from "@/lib/accountTypes";
+import { getConversationForBuyer } from "@/lib/messaging";
 
 export const dynamic = "force-dynamic";
 
@@ -29,6 +30,8 @@ export default async function AccountDetail({
   });
 
   if (!listing) return notFound();
+
+  const existingConversation = await getConversationForBuyer();
 
   const activeTab = typeof searchParams.tab === "string" && TABS.some((t) => t.key === searchParams.tab)
     ? searchParams.tab
@@ -85,7 +88,13 @@ export default async function AccountDetail({
           </div>
           <div style={{ textAlign: "right" }}>
             <div style={{ fontFamily: "'Bricolage Grotesque',sans-serif", fontSize: 32, fontWeight: 700, color: "#F0793B" }}>${listing.price}</div>
-            <ContactSellerButton listingId={listing.id} listingTitle={listing.title} middlemanAvailable={listing.middleman} />
+            <ContactSellerButton
+              listingId={listing.id}
+              listingTitle={listing.title}
+              listingPrice={listing.price}
+              middlemanAvailable={listing.middleman}
+              existingBuyerDiscord={existingConversation?.buyerDiscord}
+            />
             {listing.middleman && (
               <div style={{ fontSize: 12.5, color: "#C9A227", marginTop: 8 }}>Middleman available for this account</div>
             )}

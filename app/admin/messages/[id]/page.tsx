@@ -2,8 +2,9 @@ import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import MarkAsRead from "@/components/MarkAsRead";
 import DeleteConversationButton from "@/components/DeleteConversationButton";
+import OfferCard from "@/components/OfferCard";
 import AdminReplyForm from "../AdminReplyForm";
-import { markConversationReadByAdmin, deleteConversation } from "../actions";
+import { markConversationReadByAdmin, deleteConversation, respondToOffer } from "../actions";
 
 export const dynamic = "force-dynamic";
 
@@ -68,6 +69,16 @@ export default async function AdminConversation({ params }: { params: { id: stri
                     style={{ display: "block", maxWidth: "100%", maxHeight: 420, width: "auto", height: "auto", borderRadius: 8, objectFit: "contain" }}
                   />
                 </a>
+              )}
+              {m.offerAmount != null && (
+                <OfferCard
+                  amount={m.offerAmount}
+                  status={m.offerStatus}
+                  messageId={m.id}
+                  conversationId={conversation.id}
+                  onBubble={m.sender === "admin" ? "#14110D" : "#F3E9DA"}
+                  respondAction={m.sender === "buyer" ? respondToOffer : undefined}
+                />
               )}
               {m.body && <div style={{ whiteSpace: "pre-wrap" }}>{m.body}</div>}
             </div>

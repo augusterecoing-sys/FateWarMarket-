@@ -31,7 +31,7 @@ export async function getConversationForBuyer() {
   });
 }
 
-type Attachment = { body?: string; imageUrl?: string };
+type Attachment = { body?: string; imageUrl?: string; offerAmount?: number };
 
 export async function startConversation(buyerDiscord: string, firstMessage: Attachment, listingId?: string) {
   const token = randomUUID();
@@ -44,6 +44,8 @@ export async function startConversation(buyerDiscord: string, firstMessage: Atta
           sender: "buyer",
           body: firstMessage.body || undefined,
           imageUrl: firstMessage.imageUrl || undefined,
+          offerAmount: firstMessage.offerAmount || undefined,
+          offerStatus: firstMessage.offerAmount ? "pending" : undefined,
           listingId: listingId || undefined,
         },
       },
@@ -65,6 +67,8 @@ export async function sendBuyerMessage(message: Attachment, listingId?: string) 
       sender: "buyer",
       body: message.body || undefined,
       imageUrl: message.imageUrl || undefined,
+      offerAmount: message.offerAmount || undefined,
+      offerStatus: message.offerAmount ? "pending" : undefined,
       listingId: listingId || undefined,
     },
   });
@@ -76,12 +80,23 @@ export async function sendBuyerMessage(message: Attachment, listingId?: string) 
 
 export async function sendAdminMessage(conversationId: string, message: Attachment) {
   await prisma.message.create({
-    data: { conversationId, sender: "admin", body: message.body || undefined, imageUrl: message.imageUrl || undefined },
+    data: {
+      conversationId,
+      sender: "admin",
+      body: message.body || undefined,
+      imageUrl: message.imageUrl || undefined,
+      offerAmount: message.offerAmount || undefined,
+      offerStatus: message.offerAmount ? "pending" : undefined,
+    },
   });
   await prisma.conversation.update({
     where: { id: conversationId },
     data: { lastMessageAt: new Date(), unreadByBuyer: true },
   });
+}
+
+export async function respondToOffer(messageId: string, status: "accepted" | "declined") {
+  return prisma.message.update({ where: { id: messageId }, data: { offerStatus: status } });
 }
 
 export async function markReadByBuyer(conversationId: string) {

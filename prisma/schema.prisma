@@ -53,8 +53,10 @@ model Message {
   conversationId String
   conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
   sender         String // "buyer" | "admin"
-  body           String? // texte du message ; optionnel si le message n'est qu'une image
+  body           String? // texte du message ; optionnel si le message n'est qu'une image ou une offre
   imageUrl       String? // capture d'écran jointe au message, hébergée sur Vercel Blob
+  offerAmount    Float? // montant proposé par l'acheteur, si ce message est une offre de prix
+  offerStatus    String? // "pending" | "accepted" | "declined" — pertinent seulement si offerAmount est renseigné
   listingId      String? // annonce concernée par ce message, si applicable
   listing        Listing?     @relation(fields: [listingId], references: [id], onDelete: SetNull)
   createdAt      DateTime     @default(now())
