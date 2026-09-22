@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import AccountCard from "@/components/AccountCard";
+import AutoFilterForm from "@/components/AutoFilterForm";
 import { ACCOUNT_TYPES } from "@/lib/accountTypes";
 import type { Prisma } from "@prisma/client";
 
@@ -91,8 +92,7 @@ export default async function Browse({
       </div>
 
       <div className="browse-layout" style={{ padding: "0 5% 80px", maxWidth: 1200, margin: "0 auto" }}>
-        <form
-          method="GET"
+        <AutoFilterForm
           className="browse-sidebar"
           style={{
             display: "flex",
@@ -156,19 +156,15 @@ export default async function Browse({
             </label>
           </div>
 
-          <button
-            type="submit"
-            style={{ width: "100%", background: "#E2622B", color: "#14110D", fontSize: 13.5, fontWeight: 700, padding: 10, borderRadius: 8, border: "none" }}
-          >
-            Apply filters
-          </button>
+          {/* Bouton invisible : garde la touche Entrée fonctionnelle dans Min / Max */}
+          <button type="submit" style={{ display: "none" }} aria-hidden="true" tabIndex={-1} />
           <a
             href="/browse"
             style={{ textAlign: "center", fontSize: 13, color: "#9C9186", textDecoration: "none" }}
           >
             Clear filters
           </a>
-        </form>
+        </AutoFilterForm>
 
         <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 28 }}>
           {listings.length === 0 ? (

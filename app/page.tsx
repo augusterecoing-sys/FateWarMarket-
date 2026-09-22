@@ -77,9 +77,24 @@ export default async function Home() {
 
       {/* Featured */}
       <section style={{ padding: "16px 5% 80px", maxWidth: 1200, margin: "0 auto" }}>
-        <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", marginBottom: 22 }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 22 }}>
           <h2 style={{ fontSize: 20, fontWeight: 700, margin: 0 }}>Recent accounts</h2>
-          <a href="/browse" style={{ fontSize: 14, fontWeight: 600, color: "#9C9186", textDecoration: "none" }}>View all →</a>
+          <a
+            href="/browse"
+            style={{
+              fontSize: 14,
+              fontWeight: 700,
+              color: "#14110D",
+              background: "linear-gradient(135deg,#F0793B 0%,#E2622B 100%)",
+              padding: "9px 16px",
+              borderRadius: 8,
+              textDecoration: "none",
+              boxShadow: "0 4px 14px rgba(226,98,43,0.35)",
+              whiteSpace: "nowrap",
+            }}
+          >
+            View all →
+          </a>
         </div>
 
         {featured.length === 0 ? (
