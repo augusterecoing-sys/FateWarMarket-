@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { upload } from "@vercel/blob/client";
 import { createListing } from "./actions";
 import { ACCOUNT_TYPES } from "@/lib/accountTypes";
@@ -18,7 +18,63 @@ const CATEGORY_FIELDS: { field: string; category: string; label: string }[] = [
   { field: "photos_skins", category: "skins", label: "Skins" },
 ];
 
+// Miniature d'une photo choisie (pas encore envoyée), avec bouton × pour la retirer
+function Thumb({ file, onRemove }: { file: File; onRemove: () => void }) {
+  const [src, setSrc] = useState("");
+  useEffect(() => {
+    const url = URL.createObjectURL(file);
+    setSrc(url);
+    return () => URL.revokeObjectURL(url);
+  }, [file]);
+
+  return (
+    <div style={{ position: "relative", width: 96, height: 72 }}>
+      {src && (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img src={src} alt={file.name} style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: 6, border: "1px solid #ccc" }} />
+      )}
+      <button
+        type="button"
+        onClick={onRemove}
+        aria-label="Retirer la photo"
+        title="Retirer la photo"
+        style={{
+          position: "absolute",
+          top: -8,
+          right: -8,
+          width: 24,
+          height: 24,
+          borderRadius: "50%",
+          border: "none",
+          background: "#D9372B",
+          color: "#fff",
+          fontSize: 15,
+          fontWeight: 700,
+          lineHeight: "24px",
+          cursor: "pointer",
+          padding: 0,
+        }}
+      >
+        ×
+      </button>
+    </div>
+  );
+}
+
 export default function NewListingForm() {
+  // Photos choisies par catégorie (on peut en ajouter plusieurs fois et en retirer une par une)
+  const [photos, setPhotos] = useState<Record<string, File[]>>({});
+
+  function addPhotos(category: string, list: FileList | null) {
+    if (!list || list.length === 0) return;
+    const added = Array.from(list);
+    setPhotos((prev) => ({ ...prev, [category]: [...(prev[category] ?? []), ...added] }));
+  }
+
+  function removePhoto(category: string, index: number) {
+    setPhotos((prev) => ({ ...prev, [category]: (prev[category] ?? []).filter((_, i) => i !== index) }));
+  }
+
   const formRef = useRef<HTMLFormElement>(null);
   const [uploading, setUploading] = useState(false);
   const [progressText, setProgressText] = useState("");
@@ -35,7 +91,7 @@ export default function NewListingForm() {
       const uploadedImages: { url: string; category: string }[] = [];
 
       for (const { field: fieldName, category, label: catLabel } of CATEGORY_FIELDS) {
-        const files = formData.getAll(fieldName).filter((f): f is File => f instanceof File && f.size > 0);
+        const files = photos[category] ?? [];
         for (let i = 0; i < files.length; i++) {
           setProgressText(`Envoi de la photo ${catLabel} (${i + 1}/${files.length})...`);
           const file = files[i];
@@ -104,12 +160,37 @@ export default function NewListingForm() {
         Chaque catégorie devient un onglet sur la page du compte. Laisse vide celles que tu n'as pas.
       </p>
 
-      {CATEGORY_FIELDS.map(({ field: fieldName, label: catLabel }) => (
-        <div key={fieldName}>
-          <label style={label}>{catLabel}</label>
-          <input style={field} name={fieldName} type="file" accept="image/*" multiple />
-        </div>
-      ))}
+      {CATEGORY_FIELDS.map(({ field: fieldName, category, label: catLabel }) => {
+        const list = photos[category] ?? [];
+        return (
+          <div key={fieldName} style={{ marginBottom: 18 }}>
+            <label style={label}>
+              {catLabel} {list.length > 0 && <span style={{ fontWeight: 400, color: "#666" }}>({list.length} photo{list.length > 1 ? "s" : ""})</span>}
+            </label>
+
+            {list.length > 0 && (
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 12, margin: "10px 0 12px" }}>
+                {list.map((file, i) => (
+                  <Thumb key={`${file.name}-${file.lastModified}-${i}`} file={file} onRemove={() => removePhoto(category, i)} />
+                ))}
+              </div>
+            )}
+
+            {/* Pas de "name" : les fichiers sont gérés dans l'état, pas dans le formulaire */}
+            <input
+              style={{ ...field, marginBottom: 0 }}
+              type="file"
+              accept="image/*"
+              multiple
+              disabled={uploading}
+              onChange={(e) => {
+                addPhotos(category, e.target.files);
+                e.target.value = ""; // permet de rechoisir la même photo après l'avoir retirée
+              }}
+            />
+          </div>
+        );
+      })}
 
       <div style={section}>Infos & troupes</div>
       <label style={label}>Nombre de troupes, infos complémentaires</label>

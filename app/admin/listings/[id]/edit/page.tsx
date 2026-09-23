@@ -5,7 +5,10 @@ import EditListingForm from "./EditListingForm";
 export const dynamic = "force-dynamic";
 
 export default async function EditListing({ params }: { params: { id: string } }) {
-  const listing = await prisma.listing.findUnique({ where: { id: params.id } });
+  const listing = await prisma.listing.findUnique({
+    where: { id: params.id },
+    include: { images: { orderBy: { sortOrder: "asc" }, select: { id: true, url: true, category: true } } },
+  });
   if (!listing) return notFound();
 
   return (

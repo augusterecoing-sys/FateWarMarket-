@@ -2,6 +2,7 @@
 
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
+import { del } from "@vercel/blob";
 
 export async function updateListing(formData: FormData) {
   const id = String(formData.get("id") ?? "");
@@ -51,6 +52,26 @@ export async function updateListing(formData: FormData) {
     .map((u) => u.trim())
     .filter(Boolean);
 
+  // Photos déjà en ligne à supprimer (uniquement celles de CE compte)
+  let deleteIds: string[] = [];
+  try {
+    deleteIds = JSON.parse(String(formData.get("deleteImageIds") ?? "[]"));
+  } catch {
+    deleteIds = [];
+  }
+  const toDelete = existing.images.filter((img) => deleteIds.includes(img.id));
+  if (toDelete.length > 0) {
+    await prisma.listingImage.deleteMany({ where: { id: { in: toDelete.map((img) => img.id) }, listingId: id } });
+    for (const img of toDelete) {
+      try {
+        await del(img.url); // nettoie Vercel Blob
+      } catch {
+        // lien externe collé : rien à supprimer côté Blob
+      }
+    }
+  }
+  const remainingCount = existing.images.length - toDelete.length;
+
   const startOrder = existing.images.length;
   const newImages = [
     ...uploadedImages.map((img, i) => ({ url: img.url, category: img.category, sortOrder: startOrder + i })),
@@ -77,6 +98,7 @@ export async function updateListing(formData: FormData) {
       accountOfWeek,
       troopsInfo,
       status,
+      imageLabel: remainingCount + newImages.length === 0 ? "Account overview" : null,
       images: newImages.length > 0 ? { create: newImages } : undefined,
     },
   });
